@@ -7,7 +7,8 @@ package Logica;
 import Presentacion.FrmHome;
 
 /**
- *
+ *git config user.name "Tu Nombre Específico"
+git config user.email "correo-especifico-para-este-proyecto@dominio.com"
  * @author triamus
  */
 public class AgriPro {

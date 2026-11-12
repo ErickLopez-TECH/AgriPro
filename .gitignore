@@ -1,18 +1,21 @@
-# Carpetas de compilación y distribución
+# Carpetas de compilación, distribución y caché de NetBeans
 /build/
-/dist/
-
-# Configuraciones locales y privadas de NetBeans
-/nbproject/private/
-/nbproject/build-impl.xml
-/nbproject/genfiles.properties
-
-# Archivos compilados e históricos de Java
+ /dist/
+ /nbproject/private/
+ /nbproject/build-impl.xml
+ /nbproject/genfiles.properties
+# Archivos compilados y empaquetados de Java
 *.class
-*.jar
-*.war
-*.ear
-
-# Archivos del sistema
+ *.jar
+ *.war
+ *.ear
+ *.log
+# Archivos del sistema operativo
 .DS_Store
-Thumbs.db
+ Thumbs.db
+ ehthumbs.db
+# Configuración específica de editores e IDEs (por si alguien usa VS Code o similar)
+.vscode/
+.idea/
+*.swp
+*.swo
