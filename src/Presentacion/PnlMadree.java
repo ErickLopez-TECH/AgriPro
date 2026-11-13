@@ -13,7 +13,7 @@ import javax.swing.JPanel;
  *
  * @author jdavi
  */
-public class PnlMadre extends JPanel {
+public class PnlMadree extends JPanel {
 
    
     
@@ -23,7 +23,7 @@ public class PnlMadre extends JPanel {
     static String movimiento;
     
 
-    public PnlMadre(/*ObjUsuario usuario*/) {
+    public PnlMadree(/*ObjUsuario usuario*/) {
         initComponents();
         
         //this.usuarioActual = usuario;

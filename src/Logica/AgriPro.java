@@ -4,6 +4,7 @@
  */
 package Logica;
 
+import Datos.ArchivosE;
 import Presentacion.FrmHome;
 
 /**
@@ -16,8 +17,21 @@ public class AgriPro {
     /**
      * @param args the command line arguments
      */
+    static ArchivosE arch = new ArchivosE();
+    
+    public static void crearArchivos(){
+        arch.crearArchivos("Usuarios");
+        
+    }
+    
+    public static void llenarListas(){
+        arch.leerUsuarios();
+    }
+    
     public static void main(String[] args) {
         // TODO code application logic here
+        crearArchivos();
+        llenarListas();
         FrmHome miVentana = new FrmHome();
         miVentana.setLocale(null);
         miVentana.setVisible(true);

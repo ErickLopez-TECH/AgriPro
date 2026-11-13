@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "Cedula": "1",
+    "NombreCompleto": "1",
+    "NombreUser": "1",
+    "Clave": "1",
+    "Rol": 0,
+    "Estado": 1
+  },
+  {
+    "id": 2,
+    "Cedula": "1",
+    "NombreCompleto": "1",
+    "NombreUser": "1",
+    "Clave": "1",
+    "Rol": 0,
+    "Estado": 1
+  }
+]
