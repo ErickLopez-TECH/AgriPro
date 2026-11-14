@@ -5,7 +5,10 @@
 package Presentacion;
 
 
+import Datos.ObjUsuario;
+import Logica.MetodosUser;
 import java.awt.event.KeyEvent;
+import javax.swing.JOptionPane;
 
 
 /**
@@ -16,6 +19,7 @@ public class FrmLogin extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmLogin.class.getName());
 
+    MetodosUser misMetodos = new MetodosUser();
     /**
      * Creates new form FrmLogin
      */
@@ -59,7 +63,7 @@ public class FrmLogin extends javax.swing.JFrame {
         lblTitulo.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         lblTitulo.setForeground(new java.awt.Color(255, 255, 255));
         lblTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblTitulo.setText("VIATIC PRO");
+        lblTitulo.setText("AgriPro");
         getContentPane().add(lblTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 30, 180, 35));
 
         lblUsuario.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -118,7 +122,6 @@ public class FrmLogin extends javax.swing.JFrame {
         });
         getContentPane().add(txtClave, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 342, 340, 30));
 
-        lblFondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/fondoLisoTurquesa.png"))); // NOI18N
         lblFondo.setText(".");
         lblFondo.setMaximumSize(new java.awt.Dimension(382, 518));
         lblFondo.setMinimumSize(new java.awt.Dimension(382, 518));
@@ -140,11 +143,12 @@ public class FrmLogin extends javax.swing.JFrame {
         if (usuario.equals("") || clave.equals("")) {
             JOptionPane.showMessageDialog(null, "Datos Incompletos",
                     "Aviso Importante", JOptionPane.WARNING_MESSAGE);
-        } else if (misMetodos.buscarUsuario(usuario, clave) != -1) {
+        } else if (misMetodos.validarLogin(usuario, clave) != null) {
             //--Se toma el usuario encontrado para revisar su estado
-            ObjUsuario miUsuario = almacen.listarUsuarios().get(misMetodos.buscarUsuario(usuario, clave));
+            ObjUsuario miUsuario = misMetodos.validarLogin(usuario, clave);
+            
             if (miUsuario.getEstado() == 1) { //-- 1 Activo
-                FrmHome prc = new FrmHome(miUsuario);
+                FrmHome prc = new FrmHome();
                 prc.setLocationRelativeTo(null);
                 prc.setVisible(true);
 
@@ -160,29 +164,6 @@ public class FrmLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_btnOkActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-
-        //-- Precarga de usuarios (si la lista está vacía, para no duplicar al cerrar)
-        if (almacen.listarUsuarios().size() == 0) {
-            ObjUsuario miUsuario = new ObjUsuario();
-            miUsuario.setId(misMetodos.siguienteUsuario());
-            miUsuario.setIdentificacion("3101000001");
-            miUsuario.setNombreCompleto("Administrador ViaticPro");
-            miUsuario.setNomUsuario("admin");
-            miUsuario.setClave("1234");
-            miUsuario.setRol(0);      //-- 0 Administrador
-            miUsuario.setEstado(1);   //-- 1 Activo
-            almacen.agregarUsuario(miUsuario);
-
-            ObjUsuario miUsuario2 = new ObjUsuario();
-            miUsuario2.setId(misMetodos.siguienteUsuario());
-            miUsuario2.setIdentificacion("2222");
-            miUsuario2.setNombreCompleto("Usuario Normal");
-            miUsuario2.setNomUsuario("usuario");
-            miUsuario2.setClave("1234");
-            miUsuario2.setRol(1);     //-- 1 Normal
-            miUsuario2.setEstado(1);  //-- 1 Activo
-            almacen.agregarUsuario(miUsuario2);
-        }
 
     }//GEN-LAST:event_formWindowOpened
 

@@ -47,6 +47,22 @@ public class MetodosUser {
         return resultado;
     }
     
+    public ObjUsuario validarLogin(String nomUser, String clave){
+        ObjUsuario miUsuarioObj = null;
+        
+        //copia de la lista de las cajas
+        ArrayList<ObjUsuario> misUser = almacen.listarUser();
+        //rrecotrer mi lista de cajas
+        for (int i = 0; i < misUser.size(); i++) {
+                if((misUser.get(i).getNombreUser().equals(nomUser))
+                        &&(misUser.get(i).getClave().equals(clave))){
+                    miUsuarioObj = misUser.get(i);
+                } 
+                
+            }
+        return miUsuarioObj;
+    }
+    
     public int buscarUserId(int id){
         int resultado = -1;
         

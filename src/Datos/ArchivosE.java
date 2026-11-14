@@ -16,6 +16,8 @@ import java.io.IOException;
 /**
  *
  * @author triamus
+ * 
+ * usuarios, cultivos
  */
 public class ArchivosE {
     
@@ -25,6 +27,7 @@ public class ArchivosE {
     }
     
     EstructuraUser almacen = new EstructuraUser();
+    EstructuraCultivo almacenCulti = new EstructuraCultivo();
     
     //mensaje de error
     public void aviso(IOException e){
@@ -137,7 +140,7 @@ public class ArchivosE {
             // Separamos cada objeto por las llaves {}
             String[] objetosJson = textoJson.split("\\},\\s*\\{");
             
-            // Bucle for tradicional para recorrer cada objeto JSON encontrado
+            // Bucle for  para recorrer cada objeto JSON encontrado
             for (int i = 0; i < objetosJson.length; i++) {
                 String objStr = objetosJson[i];
                 
@@ -192,4 +195,119 @@ public class ArchivosE {
             aviso(e);
         }
     }
+    
+    public void escribeCultivos(){
+        try {
+            ArrayList<ObjCultivo> miLista = almacenCulti.listarCultivo();
+            StringBuilder jsonContructor = new StringBuilder();
+            
+            jsonContructor.append("[\n");
+            
+            for (int i = 0; i < miLista.size(); i++) {
+                ObjCultivo culti = miLista.get(i);
+                
+                jsonContructor.append("  {\n");
+                jsonContructor.append("    \"id\": ").append(culti.getId()).append(",\n");
+                jsonContructor.append("    \"NombreComercial\": \"").append(culti.getNombreComer()).append("\",\n");
+                jsonContructor.append("    \"NombreCientifico\": \"").append(culti.getNombreCientifico()).append("\",\n");
+                jsonContructor.append("    \"Estado\": ").append(culti.getEstado()).append("\n");
+                
+                //validamos pata saber si es el ultimo obj o hay mas para poner una coma o no
+                if (i < miLista.size() - 1) {
+                    jsonContructor.append("  },\n");
+                }else{
+                    jsonContructor.append("   }\n");
+                }
+            }
+            
+            jsonContructor.append("]");
+            
+            //escribimos
+            FileWriter escritor = new FileWriter("Cultivos.json");
+            escritor.write(jsonContructor.toString());
+            escritor.close();
+            
+            System.out.println("CUltivo guardados exitosamente en JSON.");
+        } catch (IOException e) {
+            aviso(e);
+        }
+    }
+ 
+    public void leerCultivos(){
+        File archivo = new File("Cultivos.json");
+        if (!archivo.exists()) {
+            System.out.println("El archivo Cultivos.json no existe todavía.");
+            return;
+        }
+        
+        try {
+            FileReader miArchivo = new FileReader(archivo);
+            BufferedReader lector = new BufferedReader(miArchivo);
+            
+            StringBuilder contenido = new StringBuilder();
+            String linea = lector.readLine();
+            
+            while (linea != null) {                
+                contenido.append(linea.trim());
+                linea = lector.readLine();
+            }
+            
+            lector.close();
+            
+            String textoJson = contenido.toString().trim();
+            
+            if (textoJson.equals("[]") || textoJson.isEmpty()) {
+                return;
+            }
+            
+            // Quitamos el corchete inicial '[' y final ']'
+            textoJson = textoJson.substring(1, textoJson.length() - 1);
+            
+            // Separamos cada objeto por las llaves {}
+            String[] objetosJson = textoJson.split("\\},\\s*\\{");
+            
+            for (int i = 0; i < objetosJson.length; i++) {
+                String objStr = objetosJson[i];
+                
+                // Limpiamos llaves y comillas sobrantes
+                String limpio = objStr.replace("{", "").replace("}", "").replace("\"", "").trim();
+                String[] pares = limpio.split(",");
+                
+                ObjCultivo culti = new ObjCultivo();
+                
+                for (int j = 0; j < pares.length; j++) {
+                    String par = pares[j];
+                    String[] partes = par.split(":");
+                    
+                    if (partes.length >= 2) {
+                        String clave = partes[0].trim();
+                        String valor = partes[1].trim();
+                        
+                        switch (clave) {
+                            case "id":
+                                culti.setId(Integer.parseInt(valor));
+                                break;
+                            
+                            case "NombreComercial":
+                                culti.setNombreComer(valor);
+                                break;
+                            
+                            case "NombreCientifico":
+                                culti.setNombreCientifico(valor);
+                                break;
+                              
+                            case  "Estado": 
+                                culti.setEstado(Integer.parseInt(valor));
+                                break;
+                        }
+                    }
+                }
+                almacenCulti.agregarCultivo(culti);
+            }
+            System.out.println("Usuarios leídos correctamente desde JSON.");
+        } catch (IOException e) {
+            aviso(e);
+        }
+    }
+   
 }
