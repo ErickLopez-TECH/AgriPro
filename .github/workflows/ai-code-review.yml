@@ -20,7 +20,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
-          GEMINI_API_KEY: ${{ secrets.DELTA_API_KEY }}
+          RAW_API_KEY: ${{ secrets.DELTA_API_KEY }}
           BASE_REF: ${{ github.event.pull_request.base.ref }}
         run: |
           python3 - << 'EOF'
@@ -29,9 +29,13 @@ jobs:
           import json
           import urllib.request
           import time
+          import re
 
-          # Limpiar espacios en blanco o saltos de línea invisibles en la API Key
-          api_key = os.environ.get("GEMINI_API_KEY", "").strip()
+          # Limpieza absoluta de la clave: extrae únicamente caracteres alfanuméricos y guiones propios de la API key
+          raw_key = os.environ.get("RAW_API_KEY", "")
+          match = re.search(r"AIza[0-9A-Za-z\-_]{35}", raw_key)
+          api_key = match.group(0) if match else raw_key.strip().split()[0]
+
           pr_number = os.environ["PR_NUMBER"]
           base_ref = os.environ["BASE_REF"]
 
