@@ -10,7 +10,7 @@ package Datos;
  */
 public class ObjUsuario {
     
-    private int id;
+    int id;
     private String cedula;
     private String nombreCompleto;
     private String nombreUser;
