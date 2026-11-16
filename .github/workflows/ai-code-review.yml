@@ -16,69 +16,77 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Run Delta Code Review with Project Rules
+      - name: Run Delta Code Review with Python
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           GEMINI_API_KEY: ${{ secrets.DELTA_API_KEY }}
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
         run: |
-          echo "Obteniendo los cambios del Pull Request..."
-          git fetch origin ${{ github.event.pull_request.base.ref }}
-          DIFF=$(git diff origin/${{ github.event.pull_request.base.ref }} HEAD)
-          
-          if [ -z "$DIFF" ]; then
-            echo "No se encontraron cambios en este PR para revisar."
-            exit 0
-          fi
+          python3 - << 'EOF'
+          import os
+          import subprocess
+          import json
+          import urllib.request
+          import time
 
-          if [ -f "REGLAS_PROYECTO.md" ]; then
-            REGLAS=$(cat REGLAS_PROYECTO.md)
-          else
-            REGLAS="Aplica buenas prácticas generales de arquitectura en capas."
-          fi
+          api_key = os.environ["GEMINI_API_KEY"]
+          pr_number = os.environ["PR_NUMBER"]
+          base_ref = os.environ["BASE_REF"]
 
-          jq -n \
-            --arg reglas "$REGLAS" \
-            --arg diff "$DIFF" \
-            '{
-              contents: [{
-                parts: [{
-                  text: ("Eres un revisor de código senior y arquitecto de software. Analiza los cambios de este Pull Request (diff) verificando estrictamente que cumplan con el siguiente documento de indicaciones del proyecto.\n\n=== DOCUMENTO DE INDICACIONES ===\n" + $reglas + "\n\n=== CAMBIOS DEL PULL REQUEST (DIFF) ===\n" + $diff)
-                }]
+          print("Obteniendo los cambios del Pull Request...")
+          subprocess.run(["git", "fetch", "origin", base_ref], check=True)
+          diff_result = subprocess.run(["git", "diff", f"origin/{base_ref}", "HEAD"], capture_output=True, text=True)
+          diff = diff_result.stdout
+
+          if not diff.strip():
+              print("No se encontraron cambios en este PR para revisar.")
+              exit(0)
+
+          try:
+              with open("REGLAS_PROYECTO.md", "r", encoding="utf-8") as f:
+                  reglas = f.read()
+          except FileNotFoundError:
+              reglas = "Aplica buenas prácticas generales de arquitectura en capas."
+
+          prompt = f"""Eres un revisor de código senior y arquitecto de software. Analiza los cambios de este Pull Request (diff) verificando estrictamente que cumplan con el siguiente documento de indicaciones del proyecto.
+
+          === DOCUMENTO DE INDICACIONES ===
+          {reglas}
+
+          === CAMBIOS DEL PULL REQUEST (DIFF) ===
+          {diff}
+
+          Proporciona recomendaciones directas, concisas y estructuradas señalando si se incumple alguna regla del documento, posibles errores lógicos o mejoras necesarias."""
+
+          url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
+          payload = {
+              "contents": [{
+                  "parts": [{"text": prompt}]
               }]
-            }' > payload.json
+          }
 
-          attempt=1
-          success=0
+          data = json.dumps(payload).encode("utf-8")
+          req = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json"})
 
-          while [ $success -eq 0 ] && [ $attempt -le 3 ]; do
-            echo "--- Intento número $attempt de contacto con la IA ---"
-            
-            RESPONSE=$(curl -s -w "\n%{http_code}" -X POST "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=$GEMINI_API_KEY" \
-              -H "Content-Type: application/json" \
-              -d @payload.json)
+          success = False
+          for attempt in range(1, 4):
+              print(f"--- Intento número {attempt} de contacto con la IA ---")
+              try:
+                  with urllib.request.urlopen(req) as response:
+                      res_body = json.loads(response.read().decode("utf-8"))
+                      review_text = res_body["candidates"][0]["content"]["parts"][0]["text"]
+                      
+                      comment_body = f"### 🤖 Revisión de Código Automática (Delta)\n\n{review_text}"
+                      subprocess.run(["gh", "pr", "comment", pr_number, "--body", comment_body], check=True)
+                      print("¡Respuesta recibida y comentada exitosamente en el Pull Request!")
+                      success = True
+                      break
+              except Exception as e:
+                  print(f"Error en el intento {attempt}: {e}")
+                  time.sleep(10)
 
-            HTTP_BODY=$(echo "$RESPONSE" | head -n -1)
-            HTTP_STATUS=$(echo "$RESPONSE" | tail -n 1)
-
-            echo "Código HTTP recibido: $HTTP_STATUS"
-
-            REVIEW_TEXT=$(echo "$HTTP_BODY" | jq -r '.candidates[0].content.parts[0].text // empty')
-
-            if [ "$HTTP_STATUS" -eq 200 ] && [ -n "$REVIEW_TEXT" ] && [ "$REVIEW_TEXT" != "null" ]; then
-              echo "¡Respuesta recibida correctamente de la IA!"
-              COMMENT_BODY=$(printf "### 🤖 Revisión de Código Automática (Delta)\n\n%s" "$REVIEW_TEXT")
-              gh pr comment "$PR_NUMBER" --body "$COMMENT_BODY"
-              success=1
-            else
-              echo "La IA no respondió o la API devolvió un error. Reintentando en 10 segundos..."
-              echo "Respuesta de la API: $HTTP_BODY"
-              sleep 10
-              attempt=$((attempt + 1))
-            fi
-          done
-
-          if [ $success -eq 0 ]; then
-            echo "Error: No se pudo obtener respuesta de la IA tras varios intentos."
-            exit 1
-          fi
+          if not success:
+              print("Error: No se pudo obtener respuesta de la IA tras varios intentos.")
+              exit(1)
+          EOF
