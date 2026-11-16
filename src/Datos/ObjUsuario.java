@@ -11,7 +11,7 @@ package Datos;
 public class ObjUsuario {
     
     int id;
-    private String cedula;
+    String cedula;
     private String nombreCompleto;
     private String nombreUser;
     private String clave;
