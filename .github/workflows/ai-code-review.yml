@@ -1,4 +1,4 @@
-name: AI Code Review - Delta (Groq Dynamic)
+name: AI Code Review - Delta (Groq Filtered)
 
 on:
   pull_request:
@@ -47,26 +47,40 @@ jobs:
               "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36"
           }
 
-          # 1. AUTODETECCIÓN: Consultar los modelos permitidos para esta clave de API específica
+          # 1. AUTODETECCIÓN Y FILTRADO INTELIGENTE
           print("Delta: Consultando modelos activos disponibles en tu cuenta de Groq...")
           selected_model = None
           try:
               models_req = urllib.request.Request("https://api.groq.com/openai/v1/models", headers=headers, method="GET")
               with urllib.request.urlopen(models_req) as res:
                   body = json.loads(res.read().decode("utf-8"))
-                  # Filtrar para descartar modelos de audio (whisper) o embeddings
-                  available_models = [m["id"] for m in body.get("data", []) if not any(x in m["id"] for x in ["whisper", "embed", "guard"])]
-                  print(f"Modelos detectados en tu cuenta: {available_models}")
-                  if available_models:
+                  
+                  # Filtrar para descartar audio (orpheus), traducciones/regionales (allam), whisper, embeddings o filtros
+                  excluded_terms = ["whisper", "embed", "guard", "orpheus", "allam"]
+                  available_models = [
+                      m["id"] for m in body.get("data", []) 
+                      if not any(term in m["id"] for term in excluded_terms)
+                  ]
+                  print(f"Modelos de texto filtrados disponibles: {available_models}")
+                  
+                  # Priorizar modelos de texto generales ideales para código
+                  preferred_order = ["openai/gpt-oss-120b", "openai/gpt-oss-20b", "qwen/qwen3.8-27b"]
+                  for pref in preferred_order:
+                      if pref in available_models:
+                          selected_model = pref
+                          break
+                  
+                  # Si no hay ninguno de los preferidos, tomar el primero de la lista filtrada
+                  if not selected_model and available_models:
                       selected_model = available_models[0]
           except Exception as e:
               print(f"Aviso al consultar la lista de modelos: {e}")
 
-          # Respaldo de seguridad si la consulta falla
+          # Respaldo por defecto si falla la consulta
           if not selected_model:
-              selected_model = "llama-3.3-70b-versatile"
+              selected_model = "openai/gpt-oss-120b"
 
-          print(f"Delta: Modelo seleccionado para la revisión -> {selected_model}")
+          print(f"Delta: Modelo de texto seleccionado -> {selected_model}")
 
           # 2. Obtener los cambios del Pull Request
           print("Delta: Obteniendo los cambios del Pull Request...")
