@@ -10,7 +10,8 @@ package Datos;
  */
 public class ObjUsuario {
     
-    //variables privadas y otras no para prueba de ia
+    //variables privadas y otras no para prueba de ia(REvicion de pull request)
+    
     int id;
     String cedula;
     private String nombreCompleto;
@@ -22,6 +23,7 @@ public class ObjUsuario {
     public ObjUsuario() {
     }
 
+    //COntructor
     public ObjUsuario(int id, String cedula, String nombreCompleto, String nombreUser, String clave, int rol, int estado) {
         this.id = id;
         this.cedula = cedula;
