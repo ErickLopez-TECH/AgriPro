@@ -1,4 +1,4 @@
-name: AI Code Review with Auto-Retry
+name: AI Code Review - Delta
 
 on:
   pull_request:
@@ -9,18 +9,19 @@ permissions:
   pull-requests: write
 
 jobs:
-  review:
+  delta-review:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Run Delta Code Review with Python
+      - name: Run Delta Code Review Engine
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
-          RAW_API_KEY: ${{ secrets.DELTA_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.DELTA_API_KEY }}
           BASE_REF: ${{ github.event.pull_request.base.ref }}
         run: |
           python3 - << 'EOF'
@@ -29,40 +30,41 @@ jobs:
           import json
           import urllib.request
           import time
-          import re
 
-          # Limpieza absoluta de la clave: extrae únicamente caracteres alfanuméricos y guiones propios de la API key
-          raw_key = os.environ.get("RAW_API_KEY", "")
-          match = re.search(r"AIza[0-9A-Za-z\-_]{35}", raw_key)
-          api_key = match.group(0) if match else raw_key.strip().split()[0]
+          # Lectura y limpieza de la clave de API de Delta
+          api_key = os.environ.get("GEMINI_API_KEY", "").strip()
+          
+          if not api_key:
+              print("Error crítico: La variable DELTA_API_KEY no está configurada o se encuentra vacía.")
+              exit(1)
 
           pr_number = os.environ["PR_NUMBER"]
           base_ref = os.environ["BASE_REF"]
 
-          print("Obteniendo los cambios del Pull Request...")
+          print("Delta: Obteniendo los cambios del Pull Request...")
           subprocess.run(["git", "fetch", "origin", base_ref], check=True)
           diff_result = subprocess.run(["git", "diff", f"origin/{base_ref}", "HEAD"], capture_output=True, text=True)
           diff = diff_result.stdout
 
           if not diff.strip():
-              print("No se encontraron cambios en este PR para revisar.")
+              print("Delta: No se encontraron cambios en este PR para revisar.")
               exit(0)
 
           try:
               with open("REGLAS_PROYECTO.md", "r", encoding="utf-8") as f:
                   reglas = f.read()
           except FileNotFoundError:
-              reglas = "Aplica buenas prácticas generales de arquitectura en capas."
+              reglas = "Aplica buenas prácticas generales de arquitectura en capas y estándares de desarrollo."
 
-          prompt = f"""Eres un revisor de código senior y arquitecto de software. Analiza los cambios de este Pull Request (diff) verificando estrictamente que cumplan con el siguiente documento de indicaciones del proyecto.
+          prompt = f"""Eres Delta, el sistema experto de revisión de código automatizada y arquitectura de software para el proyecto. Analiza los cambios de este Pull Request (diff) verificando estrictamente que cumplan con el siguiente documento de reglas e indicaciones del proyecto.
 
-          === DOCUMENTO DE INDICACIONES ===
+          === DOCUMENTO DE REGLAS DE DELTA ===
           {reglas}
 
           === CAMBIOS DEL PULL REQUEST (DIFF) ===
           {diff}
 
-          Proporciona recomendaciones directas, concisas y estructuradas señalando si se incumple alguna regla del documento, posibles errores lógicos o mejoras necesarias."""
+          Proporciona recomendaciones directas, concisas y estructuradas indicando si se infringe alguna regla arquitectónica, de capas o de negocio, destacando errores lógicos y posibles mejoras."""
 
           url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
           payload = {
@@ -76,15 +78,15 @@ jobs:
 
           success = False
           for attempt in range(1, 4):
-              print(f"--- Intento número {attempt} de contacto con la IA ---")
+              print(f"--- Delta: Intento número {attempt} de análisis con IA ---")
               try:
                   with urllib.request.urlopen(req) as response:
                       res_body = json.loads(response.read().decode("utf-8"))
                       review_text = res_body["candidates"][0]["content"]["parts"][0]["text"]
                       
-                      comment_body = f"### 🤖 Revisión de Código Automática (Delta)\n\n{review_text}"
+                      comment_body = f"### 🤖 Reporte de Revisión de Delta\n\n{review_text}"
                       subprocess.run(["gh", "pr", "comment", pr_number, "--body", comment_body], check=True)
-                      print("¡Respuesta recibida y comentada exitosamente en el Pull Request!")
+                      print("¡Delta ha publicado su reporte de revisión exitosamente en el Pull Request!")
                       success = True
                       break
               except Exception as e:
@@ -92,6 +94,6 @@ jobs:
                   time.sleep(10)
 
           if not success:
-              print("Error: No se pudo obtener respuesta de la IA tras varios intentos.")
+              print("Error: Delta no pudo completar la revisión tras varios intentos.")
               exit(1)
           EOF
