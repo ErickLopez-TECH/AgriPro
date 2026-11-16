@@ -38,6 +38,8 @@ public class EstructuraCultivo {
         return new ArrayList<>(listaCultivos);
     }
     
+    
+    //muestra los cultivos de las tablas
     public DefaultTableModel mostrarCultivo(){
         String[] titulo = {"Identificacion","Nombre Comercial","Nombre Cientifico","Estado"};
         
