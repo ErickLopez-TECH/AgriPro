@@ -1,4 +1,4 @@
-name: AI Code Review - Delta (Groq Multi-Model)
+name: AI Code Review - Delta (Groq Dynamic)
 
 on:
   pull_request:
@@ -41,6 +41,34 @@ jobs:
           pr_number = os.environ["PR_NUMBER"]
           base_ref = os.environ["BASE_REF"]
 
+          headers = {
+              "Content-Type": "application/json",
+              "Authorization": f"Bearer {api_key}",
+              "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36"
+          }
+
+          # 1. AUTODETECCIÓN: Consultar los modelos permitidos para esta clave de API específica
+          print("Delta: Consultando modelos activos disponibles en tu cuenta de Groq...")
+          selected_model = None
+          try:
+              models_req = urllib.request.Request("https://api.groq.com/openai/v1/models", headers=headers, method="GET")
+              with urllib.request.urlopen(models_req) as res:
+                  body = json.loads(res.read().decode("utf-8"))
+                  # Filtrar para descartar modelos de audio (whisper) o embeddings
+                  available_models = [m["id"] for m in body.get("data", []) if not any(x in m["id"] for x in ["whisper", "embed", "guard"])]
+                  print(f"Modelos detectados en tu cuenta: {available_models}")
+                  if available_models:
+                      selected_model = available_models[0]
+          except Exception as e:
+              print(f"Aviso al consultar la lista de modelos: {e}")
+
+          # Respaldo de seguridad si la consulta falla
+          if not selected_model:
+              selected_model = "llama-3.3-70b-versatile"
+
+          print(f"Delta: Modelo seleccionado para la revisión -> {selected_model}")
+
+          # 2. Obtener los cambios del Pull Request
           print("Delta: Obteniendo los cambios del Pull Request...")
           subprocess.run(["git", "fetch", "origin", base_ref], check=True)
           diff_result = subprocess.run(["git", "diff", f"origin/{base_ref}", "HEAD"], capture_output=True, text=True)
@@ -67,54 +95,36 @@ jobs:
           Proporciona recomendaciones directas, concisas y estructuradas indicando si se infringe alguna regla arquitectónica, de capas o de negocio, destacando errores lógicos y posibles mejoras."""
 
           url = "https://api.groq.com/openai/v1/chat/completions"
-          headers = {
-              "Content-Type": "application/json",
-              "Authorization": f"Bearer {api_key}",
-              "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+          payload = {
+              "model": selected_model,
+              "messages": [{"role": "user", "content": prompt}]
           }
 
-          # Lista actualizada de modelos vigentes en Groq
-          models_to_try = [
-              "llama-3.3-70b-specdec",
-              "meta-llama/llama-4-scout-17b-16e-instruct",
-              "qwen/qwen3-32b",
-              "llama-3.1-70b-versatile"
-          ]
+          data = json.dumps(payload).encode("utf-8")
+          req = urllib.request.Request(url, data=data, headers=headers, method="POST")
 
           success = False
-          review_text = ""
-          used_model = ""
-
-          for model_name in models_to_try:
-              print(f"--- Delta: Intentando análisis con el modelo [{model_name}] ---")
-              payload = {
-                  "model": model_name,
-                  "messages": [{"role": "user", "content": prompt}]
-              }
-              data = json.dumps(payload).encode("utf-8")
-              req = urllib.request.Request(url, data=data, headers=headers, method="POST")
-              
+          for attempt in range(1, 4):
+              print(f"--- Delta: Intento número {attempt} con el modelo [{selected_model}] ---")
               try:
                   with urllib.request.urlopen(req) as response:
                       res_body = json.loads(response.read().decode("utf-8"))
                       review_text = res_body["choices"][0]["message"]["content"]
-                      used_model = model_name
+                      
+                      comment_body = f"### 🤖 Reporte de Revisión de Delta (`{selected_model}`)\n\n{review_text}"
+                      subprocess.run(["gh", "pr", "comment", pr_number, "--body", comment_body], check=True)
+                      print("¡Delta ha publicado su reporte de revisión exitosamente en el Pull Request!")
                       success = True
-                      print(f"¡Éxito con el modelo {model_name}!")
                       break
               except urllib.error.HTTPError as e:
                   error_detail = e.read().decode("utf-8")
-                  print(f"Aviso: El modelo {model_name} falló con HTTP {e.code}: {error_detail}")
-                  continue
+                  print(f"Error HTTP {e.code} en el intento {attempt}: {error_detail}")
+                  time.sleep(10)
               except Exception as e:
-                  print(f"Aviso: Error inesperado con {model_name}: {e}")
-                  continue
+                  print(f"Error inesperado en el intento {attempt}: {e}")
+                  time.sleep(10)
 
-          if success:
-              comment_body = f"### 🤖 Reporte de Revisión de Delta (`{used_model}`)\n\n{review_text}"
-              subprocess.run(["gh", "pr", "comment", pr_number, "--body", comment_body], check=True)
-              print("¡Delta ha publicado su reporte de revisión exitosamente en el Pull Request!")
-          else:
-              print("Error crítico: Delta no pudo completar la revisión con ninguno de los modelos probados.")
+          if not success:
+              print("Error crítico: Delta no pudo completar la revisión.")
               exit(1)
           EOF
