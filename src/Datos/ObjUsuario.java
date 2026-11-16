@@ -10,8 +10,9 @@ package Datos;
  */
 public class ObjUsuario {
     
-    private int id;
-    private String cedula;
+    //variables privadas y otras no para prueba de ia
+    int id;
+    String cedula;
     private String nombreCompleto;
     private String nombreUser;
     private String clave;
