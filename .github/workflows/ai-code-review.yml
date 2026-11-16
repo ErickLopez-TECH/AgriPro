@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Run Delta Code Review with Project Rules
         env:
@@ -35,37 +37,48 @@ jobs:
             REGLAS="Aplica buenas prácticas generales de arquitectura en capas."
           fi
 
-          PROMPT="Eres un revisor de código senior y arquitecto de software. Analiza los cambios de este Pull Request (diff) verificando estrictamente que cumplan con el siguiente documento de indicaciones del proyecto.
-
-          === DOCUMENTO DE INDICACIONES DEL PROYECTO ===
-          $REGLAS
-
-          === CAMBIOS DEL PULL REQUEST (DIFF) ===
-          $DIFF
-
-          Proporciona recomendaciones directas, concisas y estructuradas señalando si se incumple alguna regla del documento, posibles errores lógicos o mejoras necesarias."
+          jq -n \
+            --arg reglas "$REGLAS" \
+            --arg diff "$DIFF" \
+            '{
+              contents: [{
+                parts: [{
+                  text: ("Eres un revisor de código senior y arquitecto de software. Analiza los cambios de este Pull Request (diff) verificando estrictamente que cumplan con el siguiente documento de indicaciones del proyecto.\n\n=== DOCUMENTO DE INDICACIONES ===\n" + $reglas + "\n\n=== CAMBIOS DEL PULL REQUEST (DIFF) ===\n" + $diff)
+                }]
+              }]
+            }' > payload.json
 
           attempt=1
           success=0
 
-          while [ $success -eq 0 ]; do
+          while [ $success -eq 0 ] && [ $attempt -le 3 ]; do
             echo "--- Intento número $attempt de contacto con la IA ---"
             
-            RESPONSE=$(curl -s -X POST "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=$GEMINI_API_KEY" \
+            RESPONSE=$(curl -s -w "\n%{http_code}" -X POST "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=$GEMINI_API_KEY" \
               -H "Content-Type: application/json" \
-              -d "{ \"contents\": [{ \"parts\": [{ \"text\": $(echo "$PROMPT" | jq -Rs .) }] }] }")
+              -d @payload.json)
 
-            REVIEW_TEXT=$(echo "$RESPONSE" | jq -r '.candidates[0].content.parts[0].text // empty')
+            HTTP_BODY=$(echo "$RESPONSE" | head -n -1)
+            HTTP_STATUS=$(echo "$RESPONSE" | tail -n 1)
 
-            if [ -n "$REVIEW_TEXT" ] && [ "$REVIEW_TEXT" != "null" ]; then
-              echo "¡Respuesta recibida correctamente en el intento $attempt!"
-              gh pr comment "$PR_NUMBER" --body "### 🤖 Revisión de Código Automática (Delta)
+            echo "Código HTTP recibido: $HTTP_STATUS"
 
-          $REVIEW_TEXT"
+            REVIEW_TEXT=$(echo "$HTTP_BODY" | jq -r '.candidates[0].content.parts[0].text // empty')
+
+            if [ "$HTTP_STATUS" -eq 200 ] && [ -n "$REVIEW_TEXT" ] && [ "$REVIEW_TEXT" != "null" ]; then
+              echo "¡Respuesta recibida correctamente de la IA!"
+              COMMENT_BODY=$(printf "### 🤖 Revisión de Código Automática (Delta)\n\n%s" "$REVIEW_TEXT")
+              gh pr comment "$PR_NUMBER" --body "$COMMENT_BODY"
               success=1
             else
               echo "La IA no respondió o la API devolvió un error. Reintentando en 10 segundos..."
+              echo "Respuesta de la API: $HTTP_BODY"
               sleep 10
               attempt=$((attempt + 1))
             fi
           done
+
+          if [ $success -eq 0 ]; then
+            echo "Error: No se pudo obtener respuesta de la IA tras varios intentos."
+            exit 1
+          fi
