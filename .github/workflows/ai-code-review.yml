@@ -1,0 +1,71 @@
+name: AI Code Review with Auto-Retry
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Delta Code Review with Project Rules
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          GEMINI_API_KEY: ${{ secrets.DELTA_API_KEY }}
+        run: |
+          echo "Obteniendo los cambios del Pull Request..."
+          git fetch origin ${{ github.event.pull_request.base.ref }}
+          DIFF=$(git diff origin/${{ github.event.pull_request.base.ref }} HEAD)
+          
+          if [ -z "$DIFF" ]; then
+            echo "No se encontraron cambios en este PR para revisar."
+            exit 0
+          fi
+
+          if [ -f "REGLAS_PROYECTO.md" ]; then
+            REGLAS=$(cat REGLAS_PROYECTO.md)
+          else
+            REGLAS="Aplica buenas prácticas generales de arquitectura en capas."
+          fi
+
+          PROMPT="Eres un revisor de código senior y arquitecto de software. Analiza los cambios de este Pull Request (diff) verificando estrictamente que cumplan con el siguiente documento de indicaciones del proyecto.
+
+          === DOCUMENTO DE INDICACIONES DEL PROYECTO ===
+          $REGLAS
+
+          === CAMBIOS DEL PULL REQUEST (DIFF) ===
+          $DIFF
+
+          Proporciona recomendaciones directas, concisas y estructuradas señalando si se incumple alguna regla del documento, posibles errores lógicos o mejoras necesarias."
+
+          attempt=1
+          success=0
+
+          while [ $success -eq 0 ]; do
+            echo "--- Intento número $attempt de contacto con la IA ---"
+            
+            RESPONSE=$(curl -s -X POST "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=$GEMINI_API_KEY" \
+              -H "Content-Type: application/json" \
+              -d "{ \"contents\": [{ \"parts\": [{ \"text\": $(echo "$PROMPT" | jq -Rs .) }] }] }")
+
+            REVIEW_TEXT=$(echo "$RESPONSE" | jq -r '.candidates[0].content.parts[0].text // empty')
+
+            if [ -n "$REVIEW_TEXT" ] && [ "$REVIEW_TEXT" != "null" ]; then
+              echo "¡Respuesta recibida correctamente en el intento $attempt!"
+              gh pr comment "$PR_NUMBER" --body "### 🤖 Revisión de Código Automática (Delta)
+
+          $REVIEW_TEXT"
+              success=1
+            else
+              echo "La IA no respondió o la API devolvió un error. Reintentando en 10 segundos..."
+              sleep 10
+              attempt=$((attempt + 1))
+            fi
+          done
