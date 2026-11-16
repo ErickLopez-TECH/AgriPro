@@ -29,9 +29,9 @@ jobs:
           import subprocess
           import json
           import urllib.request
+          import urllib.error
           import time
 
-          # Lectura y limpieza de la clave de API de Delta
           api_key = os.environ.get("GEMINI_API_KEY", "").strip()
           
           if not api_key:
@@ -66,7 +66,16 @@ jobs:
 
           Proporciona recomendaciones directas, concisas y estructuradas indicando si se infringe alguna regla arquitectónica, de capas o de negocio, destacando errores lógicos y posibles mejoras."""
 
-          url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
+          # Configuración inteligente según el tipo de clave (AQ... o AIza...)
+          headers = {"Content-Type": "application/json"}
+          if api_key.startswith("AQ"):
+              url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent"
+              headers["Authorization"] = f"Bearer {api_key}"
+              print("Delta: Utilizando autenticación por Bearer Token (AQ...).")
+          else:
+              url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
+              print("Delta: Utilizando autenticación por API Key (AIza...).")
+
           payload = {
               "contents": [{
                   "parts": [{"text": prompt}]
@@ -74,7 +83,7 @@ jobs:
           }
 
           data = json.dumps(payload).encode("utf-8")
-          req = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json"})
+          req = urllib.request.Request(url, data=data, headers=headers, method="POST")
 
           success = False
           for attempt in range(1, 4):
@@ -89,8 +98,12 @@ jobs:
                       print("¡Delta ha publicado su reporte de revisión exitosamente en el Pull Request!")
                       success = True
                       break
+              except urllib.error.HTTPError as e:
+                  error_detail = e.read().decode("utf-8")
+                  print(f"Error HTTP {e.code} en el intento {attempt}: {error_detail}")
+                  time.sleep(10)
               except Exception as e:
-                  print(f"Error en el intento {attempt}: {e}")
+                  print(f"Error inesperado en el intento {attempt}: {e}")
                   time.sleep(10)
 
           if not success:
