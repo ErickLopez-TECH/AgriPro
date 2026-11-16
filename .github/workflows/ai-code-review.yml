@@ -30,7 +30,8 @@ jobs:
           import urllib.request
           import time
 
-          api_key = os.environ["GEMINI_API_KEY"]
+          # Limpiar espacios en blanco o saltos de línea invisibles en la API Key
+          api_key = os.environ.get("GEMINI_API_KEY", "").strip()
           pr_number = os.environ["PR_NUMBER"]
           base_ref = os.environ["BASE_REF"]
 
