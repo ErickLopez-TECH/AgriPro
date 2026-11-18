@@ -55,7 +55,7 @@ jobs:
               with urllib.request.urlopen(models_req) as res:
                   body = json.loads(res.read().decode("utf-8"))
                   
-                  # Filtrar para descartar audio (orpheus), traducciones/regionales (allam), whisper, embeddings o filtros
+                  # Filtrar para descartar audio, traducciones, embeddings o filtros
                   excluded_terms = ["whisper", "embed", "guard", "orpheus", "allam"]
                   available_models = [
                       m["id"] for m in body.get("data", []) 
@@ -70,27 +70,39 @@ jobs:
                           selected_model = pref
                           break
                   
-                  # Si no hay ninguno de los preferidos, tomar el primero de la lista filtrada
                   if not selected_model and available_models:
                       selected_model = available_models[0]
           except Exception as e:
               print(f"Aviso al consultar la lista de modelos: {e}")
 
-          # Respaldo por defecto si falla la consulta
           if not selected_model:
               selected_model = "openai/gpt-oss-120b"
 
           print(f"Delta: Modelo de texto seleccionado -> {selected_model}")
 
-          # 2. Obtener los cambios del Pull Request
+          # 2. Obtener los cambios del Pull Request (FILTRANDO imágenes, binarios y autogenerados)
           print("Delta: Obteniendo los cambios del Pull Request...")
           subprocess.run(["git", "fetch", "origin", base_ref], check=True)
-          diff_result = subprocess.run(["git", "diff", f"origin/{base_ref}", "HEAD"], capture_output=True, text=True)
+          
+          # Se excluyen explícitamente imágenes, archivos pesados y diseñadores gráficos de Java Swing para evitar saturar tokens
+          diff_result = subprocess.run([
+              "git", "diff", f"origin/{base_ref}", "HEAD", "--", 
+              ".", 
+              ":!*.png", ":!*.jpg", ":!*.jpeg", ":!*.gif", ":!*.ico", 
+              ":!*.pdf", ":!*.zip", ":!*.exe", ":!*.jar",
+              ":!*Designer.java"
+          ], capture_output=True, text=True)
           diff = diff_result.stdout
 
           if not diff.strip():
-              print("Delta: No se encontraron cambios en este PR para revisar.")
+              print("Delta: No se encontraron cambios de código relevantes en este PR para revisar.")
               exit(0)
+
+          # Mecanismo de seguridad: Truncar el diff si excede un límite seguro de caracteres
+          MAX_DIFF_LENGTH = 15000
+          if len(diff) > MAX_DIFF_LENGTH:
+              print(f"Delta: El diff es muy extenso ({len(diff)} chars), recortando para ajustarse a los límites de tokens de Groq...")
+              diff = diff[:MAX_DIFF_LENGTH] + "\n\n[... Diff truncado por superar el límite de tamaño de tokens de la API ...]"
 
           try:
               with open("REGLAS_PROYECTO.md", "r", encoding="utf-8") as f:
@@ -98,7 +110,7 @@ jobs:
           except FileNotFoundError:
               reglas = "Aplica buenas prácticas generales de arquitectura en capas y estándares de desarrollo."
 
-          prompt = f"""Eres Delta, el sistema experto de revisión de código automatizada y arquitectura de software para el proyecto AgriPro. Analiza los cambios de este Pull Request (diff) verificando estrictamente que cumplan con el siguiente documento de reglas e indicaciones del proyecto.
+          prompt = f"""Eres Delta, el sistema experto de revisión de código automatizada y arquitectura de software. Analiza los cambios de este Pull Request (diff) verificando estrictamente que cumplan con el siguiente documento de reglas e indicaciones del proyecto.
 
           === DOCUMENTO DE REGLAS DE DELTA ===
           {reglas}
