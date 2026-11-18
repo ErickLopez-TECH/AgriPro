@@ -57,6 +57,7 @@ public class FrmLogin extends javax.swing.JFrame {
         lblFondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("AgriPro - Iniciar sesión");
         setForeground(new java.awt.Color(102, 204, 255));
         setResizable(false);
         setSize(new java.awt.Dimension(720, 420));
