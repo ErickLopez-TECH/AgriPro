@@ -39,20 +39,28 @@ public class FrmLogin extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        lblTitulo = new javax.swing.JLabel();
         lblUsuario = new javax.swing.JLabel();
         lblClave = new javax.swing.JLabel();
         txtUsuario = new javax.swing.JTextField();
         btnOk = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
         txtClave = new javax.swing.JPasswordField();
+        pnlMarca = new javax.swing.JPanel();
+        lblTitulo = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        pnlLínea = new javax.swing.JPanel();
+        pnlDetalle = new javax.swing.JPanel();
+        lblEmpresa = new javax.swing.JLabel();
+        lblInicar = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         lblFondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("AgriPro - Iniciar sesión");
         setForeground(new java.awt.Color(102, 204, 255));
-        setMinimumSize(new java.awt.Dimension(400, 550));
-        setPreferredSize(new java.awt.Dimension(400, 550));
-        setSize(new java.awt.Dimension(400, 550));
+        setResizable(false);
+        setSize(new java.awt.Dimension(720, 420));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -60,23 +68,19 @@ public class FrmLogin extends javax.swing.JFrame {
         });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        lblTitulo.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        lblTitulo.setForeground(new java.awt.Color(255, 255, 255));
-        lblTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblTitulo.setText("AgriPro");
-        getContentPane().add(lblTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 30, 180, 35));
-
         lblUsuario.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        lblUsuario.setForeground(new java.awt.Color(255, 255, 255));
-        lblUsuario.setText("Nombre de Usuario:");
-        getContentPane().add(lblUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, -1, -1));
+        lblUsuario.setForeground(new java.awt.Color(70, 52, 35));
+        lblUsuario.setText("Nombre de Usuario");
+        getContentPane().add(lblUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 150, -1, -1));
 
         lblClave.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        lblClave.setForeground(new java.awt.Color(255, 255, 255));
-        lblClave.setText("Contraseña:");
-        getContentPane().add(lblClave, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 310, 95, -1));
+        lblClave.setForeground(new java.awt.Color(70, 52, 35));
+        lblClave.setText("Contraseña");
+        getContentPane().add(lblClave, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 220, 95, -1));
 
-        txtUsuario.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        txtUsuario.setBackground(new java.awt.Color(255, 255, 255));
+        txtUsuario.setForeground(new java.awt.Color(70, 52, 35));
+        txtUsuario.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(205, 195, 170), 1, true));
         txtUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtUsuarioActionPerformed(evt);
@@ -87,45 +91,128 @@ public class FrmLogin extends javax.swing.JFrame {
                 txtUsuarioKeyPressed(evt);
             }
         });
-        getContentPane().add(txtUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, 340, 30));
+        getContentPane().add(txtUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 170, 310, 30));
 
-        btnOk.setBackground(new java.awt.Color(0, 153, 102));
+        btnOk.setBackground(new java.awt.Color(86, 140, 72));
         btnOk.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnOk.setForeground(new java.awt.Color(242, 242, 242));
+        btnOk.setForeground(new java.awt.Color(255, 255, 255));
         btnOk.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/ingresar24.png"))); // NOI18N
         btnOk.setText("Ingresar");
-        btnOk.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btnOk.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(60, 98, 50)));
         btnOk.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnOkActionPerformed(evt);
             }
         });
-        getContentPane().add(btnOk, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 410, 120, 40));
+        getContentPane().add(btnOk, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 330, 140, 40));
 
-        btnSalir.setBackground(new java.awt.Color(153, 0, 0));
+        btnSalir.setBackground(new java.awt.Color(184, 84, 60));
         btnSalir.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnSalir.setForeground(new java.awt.Color(242, 242, 242));
+        btnSalir.setForeground(new java.awt.Color(255, 255, 255));
         btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/salir24.png"))); // NOI18N
         btnSalir.setText("Salir");
-        btnSalir.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btnSalir.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(129, 59, 42)));
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSalirActionPerformed(evt);
             }
         });
-        getContentPane().add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 410, 120, 40));
+        getContentPane().add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 330, 140, 40));
 
+        txtClave.setBackground(new java.awt.Color(255, 255, 255));
+        txtClave.setForeground(new java.awt.Color(70, 52, 35));
+        txtClave.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(205, 195, 170)));
+        txtClave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtClaveActionPerformed(evt);
+            }
+        });
         txtClave.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtClaveKeyPressed(evt);
             }
         });
-        getContentPane().add(txtClave, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 342, 340, 30));
+        getContentPane().add(txtClave, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 250, 310, 30));
 
+        pnlMarca.setBackground(new java.awt.Color(38, 70, 45));
+
+        lblTitulo.setFont(new java.awt.Font("Tahoma", 3, 32)); // NOI18N
+        lblTitulo.setForeground(new java.awt.Color(247, 242, 228));
+        lblTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTitulo.setText("AgriPro");
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/agricultureX64.png"))); // NOI18N
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(232, 178, 58));
+        jLabel2.setText("Control Agrícola");
+
+        pnlLínea.setBackground(new java.awt.Color(232, 178, 58));
+
+        pnlDetalle.setBackground(new java.awt.Color(232, 178, 58));
+
+        lblEmpresa.setForeground(new java.awt.Color(170, 190, 160));
+        lblEmpresa.setText("Agricola Los 3 Patitos S.A");
+
+        javax.swing.GroupLayout pnlMarcaLayout = new javax.swing.GroupLayout(pnlMarca);
+        pnlMarca.setLayout(pnlMarcaLayout);
+        pnlMarcaLayout.setHorizontalGroup(
+            pnlMarcaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlMarcaLayout.createSequentialGroup()
+                .addComponent(pnlDetalle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(pnlMarcaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlMarcaLayout.createSequentialGroup()
+                        .addGap(48, 48, 48)
+                        .addComponent(lblTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlMarcaLayout.createSequentialGroup()
+                        .addGap(117, 117, 117)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlMarcaLayout.createSequentialGroup()
+                        .addGap(96, 96, 96)
+                        .addGroup(pnlMarcaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel2)
+                            .addComponent(pnlLínea, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(pnlMarcaLayout.createSequentialGroup()
+                        .addGap(84, 84, 84)
+                        .addComponent(lblEmpresa)))
+                .addContainerGap(62, Short.MAX_VALUE))
+        );
+        pnlMarcaLayout.setVerticalGroup(
+            pnlMarcaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlMarcaLayout.createSequentialGroup()
+                .addGap(95, 95, 95)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pnlLínea, javax.swing.GroupLayout.PREFERRED_SIZE, 4, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 112, Short.MAX_VALUE)
+                .addComponent(lblEmpresa)
+                .addGap(44, 44, 44))
+            .addComponent(pnlDetalle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        getContentPane().add(pnlMarca, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 320, 420));
+
+        lblInicar.setFont(new java.awt.Font("Tahoma", 1, 22)); // NOI18N
+        lblInicar.setForeground(new java.awt.Color(70, 52, 35));
+        lblInicar.setText("Iniciar sesión ");
+        getContentPane().add(lblInicar, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 50, 160, 30));
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(120, 100, 75));
+        jLabel3.setText("Ingrese sus credenciales para continuar");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 90, 230, -1));
+
+        lblFondo.setBackground(new java.awt.Color(247, 242, 228));
         lblFondo.setText(".");
         lblFondo.setMaximumSize(new java.awt.Dimension(382, 518));
         lblFondo.setMinimumSize(new java.awt.Dimension(382, 518));
-        getContentPane().add(lblFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 400, -1));
+        lblFondo.setOpaque(true);
+        lblFondo.setPreferredSize(new java.awt.Dimension(382, 518));
+        getContentPane().add(lblFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 720, 420));
 
         getAccessibleContext().setAccessibleDescription("");
 
@@ -189,6 +276,10 @@ public class FrmLogin extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtClaveKeyPressed
 
+    private void txtClaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtClaveActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtClaveActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -222,10 +313,18 @@ public class FrmLogin extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnOk;
     private javax.swing.JButton btnSalir;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel lblClave;
+    private javax.swing.JLabel lblEmpresa;
     private javax.swing.JLabel lblFondo;
+    private javax.swing.JLabel lblInicar;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JLabel lblUsuario;
+    private javax.swing.JPanel pnlDetalle;
+    private javax.swing.JPanel pnlLínea;
+    private javax.swing.JPanel pnlMarca;
     private javax.swing.JPasswordField txtClave;
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
