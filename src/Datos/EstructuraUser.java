@@ -60,25 +60,4 @@ public class EstructuraUser {
         }
         return modelo;
     }
-    
-    public DefaultTableModel mostrarPrueba(){
-        
-        String[] titulo = {"Identificacion","Nombre User","Nombre","Cedula"};
-        
-        DefaultTableModel modelo = new DefaultTableModel(titulo,0);
-        
-        for (int i = 0; i < listaUsuarios.size(); i++) {
-            
-            String[] fila = {
-                String.valueOf(listaUsuarios.get(i).getId()),
-                listaUsuarios.get(i).getNombreUser(),
-                listaUsuarios.get(i).getNombreCompleto(),
-                
-                listaUsuarios.get(i).getCedula()
-            };
-            
-             modelo.addRow(fila);
-        }
-        return modelo;
-    }
 }

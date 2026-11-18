@@ -12,9 +12,8 @@ public class ObjUsuario {
     
     //variables privadas y otras no para prueba de ia(REvicion de pull request)
     
-    //variables privadas y otras no para prueba de ia
-    int id;
-    String cedula;
+    private int id;
+    private String cedula;
     private String nombreCompleto;
     private String nombreUser;
     private String clave;
