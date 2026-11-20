@@ -28,13 +28,14 @@ public class ArchivosE {
     
     EstructuraUser almacen = new EstructuraUser();
     EstructuraCultivo almacenCulti = new EstructuraCultivo();
+    EstructuraAgroquimico almacenAgro = new EstructuraAgroquimico();
     
     //mensaje de error
     public void aviso(IOException e){
         JOptionPane.showMessageDialog(null, e.toString(), "Atencion", JOptionPane.ERROR_MESSAGE);
     }
     
-    //-- metodos con cualquier archivo (crear/Limpiar)
+    //-------metodos con cualquier archivo (crear/Limpiar)-------
     public void crearArchivos(String nombreArch){
         File miArchivo = new File(nombreArch + ".json");
         try {
@@ -59,7 +60,7 @@ public class ArchivosE {
         }
     }
     
-   // Método para escribir los usuarios en formato JSON 
+   //-------Método para escribir los usuarios en formato JSON-------
    
     public void escribeUsuarios(){
         
@@ -196,6 +197,9 @@ public class ArchivosE {
         }
     }
     
+    
+    //-------Método para escribir los cultivos en formato JSON-------
+    
     public void escribeCultivos(){
         try {
             ArrayList<ObjCultivo> miLista = almacenCulti.listarCultivo();
@@ -309,5 +313,132 @@ public class ArchivosE {
             aviso(e);
         }
     }
-   
+    
+    //-------Método para escribir los Agro Quimicos en formato JSON-------
+    public void escribeAgroquimicos(){
+        try {
+            ArrayList<ObjAgroquimico> miLista = almacenAgro.listarAgroquimico();
+            StringBuilder jsonConstructor = new StringBuilder();
+
+            //Iniciamos el arreglo JSON
+            jsonConstructor.append("[\n");
+
+            for (int i = 0; i < miLista.size(); i++) {
+                ObjAgroquimico agro = miLista.get(i);
+
+                jsonConstructor.append("  {\n");
+                jsonConstructor.append("    \"id\": ").append(agro.getId()).append(",\n");
+                jsonConstructor.append("    \"NombreComercial\": \"").append(limpiarTexto(agro.getNombreComercial())).append("\",\n");
+                jsonConstructor.append("    \"Reactivo\": \"").append(limpiarTexto(agro.getReactivo())).append("\",\n");
+                jsonConstructor.append("    \"Presentacion\": \"").append(limpiarTexto(agro.getPresentacion())).append("\",\n");
+                jsonConstructor.append("    \"DosisHectarea\": ").append(agro.getDosisHectarea()).append(",\n");
+                jsonConstructor.append("    \"Tipo\": \"").append(limpiarTexto(agro.getTipo())).append("\",\n");
+                jsonConstructor.append("    \"Estado\": ").append(agro.getEstado()).append("\n");
+
+                //si no es el último objeto se pone coma al cerrar la llave
+                if (i < miLista.size() - 1) {
+                    jsonConstructor.append("  },\n");
+                } else {
+                    jsonConstructor.append("  }\n");
+                }
+            }
+
+            //Cerramos el arreglo JSON
+            jsonConstructor.append("]");
+
+            //Escribimos todo el texto de una vez
+            FileWriter escritor = new FileWriter("Agroquimicos.json");
+            escritor.write(jsonConstructor.toString());
+            escritor.close();
+
+            System.out.println("Agroquimicos guardados exitosamente en JSON.");
+
+        } catch (IOException e) {
+            aviso(e);
+        }
+    }
+
+    public void leerAgroquimicos(){
+        File archivo = new File("Agroquimicos.json");
+        if (!archivo.exists()) {
+            System.out.println("El archivo Agroquimicos.json no existe todavía.");
+            return;
+        }
+
+        try {
+            FileReader miArchivo = new FileReader(archivo);
+            BufferedReader lector = new BufferedReader(miArchivo);
+
+            //Se junta todo el archivo en un solo texto
+            StringBuilder contenido = new StringBuilder();
+            String linea = lector.readLine();
+            while (linea != null) {
+                contenido.append(linea.trim());
+                linea = lector.readLine();
+            }
+            lector.close();
+
+            //Cada objeto empieza donde aparece "id":, así que se parte el texto en esos puntos.
+            //La posición 0 es lo que había antes del primer id (el corchete y la llave), se ignora.
+            //Si el archivo está vacío o es "[]", el for no se ejecuta.
+            String[] objetos = contenido.toString().split("\"id\":");
+
+            for (int i = 1; i < objetos.length; i++) {
+                String objeto = "\"id\":" + objetos[i];
+
+                ObjAgroquimico agro = new ObjAgroquimico();
+                agro.setId(Integer.parseInt(valorJson(objeto, "id")));
+                agro.setNombreComercial(valorJson(objeto, "NombreComercial"));
+                agro.setReactivo(valorJson(objeto, "Reactivo"));
+                agro.setPresentacion(valorJson(objeto, "Presentacion"));
+                agro.setDosisHectarea(Double.parseDouble(valorJson(objeto, "DosisHectarea")));
+                agro.setTipo(valorJson(objeto, "Tipo"));
+                agro.setEstado(Integer.parseInt(valorJson(objeto, "Estado")));
+
+                almacenAgro.agregarAgroquimico(agro);
+            }
+
+            System.out.println("Agroquimicos leidos correctamente desde JSON.");
+
+        } catch (IOException e) {
+            aviso(e);
+        }
+    }
+
+    //Busca una clave dentro del texto de un objeto JSON y devuelve su valor sin comillas.
+    private String valorJson(String objeto, String clave){
+        String buscar = "\"" + clave + "\":";
+        int inicio = objeto.indexOf(buscar);
+        if (inicio == -1){
+            return "";
+        }
+
+        //el valor empieza justo después de los dos puntos
+        String resto = objeto.substring(inicio + buscar.length()).trim();
+        String valor = "";
+
+        if (resto.startsWith("\"")){
+            int fin = resto.indexOf("\"", 1);
+            valor = resto.substring(1, fin);
+        } else{
+            int fin = resto.length();
+            int coma = resto.indexOf(",");
+            int llave = resto.indexOf("}");
+            if (coma != -1 && coma < fin){
+                fin = coma;
+            }
+            if (llave != -1 && llave < fin){
+                fin = llave;
+            }
+            valor = resto.substring(0, fin).trim();
+        }
+        return valor;
+    }
+
+    //Cambia las comillas dobles por simples: una comilla doble dentro del texto
+    //cerraría el valor del JSON antes de tiempo
+    private String limpiarTexto(String texto){
+        return texto.replace("\"", "'");
+    }
+    
 }
