@@ -22,12 +22,14 @@ public class AgriPro {
     public static void crearArchivos(){
         arch.crearArchivos("Usuarios");
         arch.crearArchivos("Cultivos");
+        arch.crearArchivos("Agroquimicos");
         
     }
     
     public static void llenarListas(){
         arch.leerUsuarios();
         arch.leerCultivos();
+        arch.leerAgroquimicos();
     }
     
     public static void main(String[] args) {
