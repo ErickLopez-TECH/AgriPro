@@ -88,7 +88,7 @@ public class FrmHome extends javax.swing.JFrame {
             .addGap(0, 690, Short.MAX_VALUE)
         );
 
-        getContentPane().add(pnlDetalle, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 5, 690));
+        getContentPane().add(pnlDetalle, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 690));
         pnlDetalle.getAccessibleContext().setAccessibleName("");
 
         jPanel3.setBackground(new java.awt.Color(232, 178, 58));
@@ -356,7 +356,6 @@ public class FrmHome extends javax.swing.JFrame {
         lblUsuario.setForeground(new java.awt.Color(70, 52, 35));
         lblUsuario.setText("Bienvenido Usuario:");
 
-        btnCerrar.setBackground(new java.awt.Color(255, 255, 255));
         btnCerrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/apagar.png"))); // NOI18N
         btnCerrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

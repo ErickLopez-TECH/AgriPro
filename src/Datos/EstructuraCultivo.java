@@ -15,7 +15,7 @@ public class EstructuraCultivo {
     static ArrayList<ObjCultivo> listaCultivos = new ArrayList<>();
     
     /*----------------------------------------------------------
-    |              Metodos de trabajo de cultivos     |
+    |              Metodos de trabajo de cultivos             |
     |                                                         |
     ----------------------------------------------------------*/
     public void agregarCultivo(ObjCultivo miCultivo){
