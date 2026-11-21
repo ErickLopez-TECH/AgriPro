@@ -138,6 +138,7 @@ public class PnlMadree extends JPanel {
         btnGuardar.setBackground(new java.awt.Color(86, 140, 72));
         btnGuardar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnGuardar.setForeground(new java.awt.Color(255, 255, 255));
+        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/guardar.png"))); // NOI18N
         btnGuardar.setText("  Guardar");
         btnGuardar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
@@ -150,9 +151,9 @@ public class PnlMadree extends JPanel {
         btnBorrar.setBackground(new java.awt.Color(184, 84, 60));
         btnBorrar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnBorrar.setForeground(new java.awt.Color(255, 255, 255));
+        btnBorrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/boton-eliminar.png"))); // NOI18N
         btnBorrar.setText("  Borrar");
         btnBorrar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        btnBorrar.setBorderPainted(false);
         btnBorrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBorrarActionPerformed(evt);
@@ -171,9 +172,9 @@ public class PnlMadree extends JPanel {
         btnBuscar.setBackground(new java.awt.Color(247, 242, 228));
         btnBuscar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnBuscar.setForeground(new java.awt.Color(70, 52, 35));
-        btnBuscar.setText("...");
+        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/lupa.png"))); // NOI18N
         btnBuscar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(205, 195, 170)));
-        pnlTarjeta.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 30, 30, 30));
+        pnlTarjeta.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 30, 40, 30));
 
         lblCampo1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblCampo1.setForeground(new java.awt.Color(70, 52, 35));
@@ -214,7 +215,9 @@ public class PnlMadree extends JPanel {
         btnListar.setBackground(new java.awt.Color(232, 178, 58));
         btnListar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnListar.setForeground(new java.awt.Color(70, 52, 35));
+        btnListar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/lista.png"))); // NOI18N
         btnListar.setText("Listar");
+        btnListar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         pnlTarjeta.add(btnListar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 150, 130, 40));
 
         add(pnlTarjeta, new org.netbeans.lib.awtextra.AbsoluteConstraints(25, 75, 600, 225));
