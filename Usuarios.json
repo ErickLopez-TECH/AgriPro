@@ -25,5 +25,14 @@
     "Clave": "2",
     "Rol": 0,
     "Estado": 0
+  },
+  {
+    "id": 4,
+    "Cedula": "155852559332",
+    "NombreCompleto": "Erick Lopez",
+    "NombreUser": "erick",
+    "Clave": "2026",
+    "Rol": 1,
+    "Estado": 0
   }
 ]
