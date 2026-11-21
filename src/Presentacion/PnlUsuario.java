@@ -67,34 +67,121 @@ public class PnlUsuario extends JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        pnlSubrayado = new javax.swing.JPanel();
+        pnlSubrayado1 = new javax.swing.JPanel();
+        lblTitulo = new javax.swing.JLabel();
+        lblDescripcion = new javax.swing.JLabel();
+        pnlTarjeta = new javax.swing.JPanel();
+        lblId = new javax.swing.JLabel();
+        btnBuscar = new javax.swing.JButton();
+        lblEstado1 = new javax.swing.JLabel();
+        cmbEstado = new javax.swing.JComboBox<>();
+        txtId = new javax.swing.JTextField();
+        lblCedula = new javax.swing.JLabel();
+        txtCedula = new javax.swing.JTextField();
+        lblNombre = new javax.swing.JLabel();
+        txtNombre = new javax.swing.JTextField();
+        lblUser = new javax.swing.JLabel();
+        txtUser = new javax.swing.JTextField();
+        lblClave = new javax.swing.JLabel();
+        pswClave = new javax.swing.JPasswordField();
         btnGuardar = new javax.swing.JButton();
         btnBorrar = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblEmpleados = new javax.swing.JTable();
-        jPanel1 = new javax.swing.JPanel();
-        lblTitulo = new javax.swing.JLabel();
-        lblId = new javax.swing.JLabel();
-        lblCedula = new javax.swing.JLabel();
-        lblNombre = new javax.swing.JLabel();
-        lblUser = new javax.swing.JLabel();
-        lblClave = new javax.swing.JLabel();
         lblRol = new javax.swing.JLabel();
-        lblEstado = new javax.swing.JLabel();
-        txtUser = new javax.swing.JTextField();
-        txtId = new javax.swing.JTextField();
-        txtCedula = new javax.swing.JTextField();
-        txtNombre = new javax.swing.JTextField();
-        pswClave = new javax.swing.JPasswordField();
         cmbRol = new javax.swing.JComboBox<>();
-        cmbEstado = new javax.swing.JComboBox<>();
+        pnlSubrayado2 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblEmpleados = new javax.swing.JTable();
 
-        setBackground(new java.awt.Color(204, 255, 229));
+        pnlSubrayado.setBackground(new java.awt.Color(232, 178, 58));
+
+        pnlSubrayado1.setBackground(new java.awt.Color(232, 178, 58));
+
+        setBackground(new java.awt.Color(247, 242, 228));
         setMaximumSize(new java.awt.Dimension(650, 540));
         setMinimumSize(new java.awt.Dimension(650, 540));
         setPreferredSize(new java.awt.Dimension(650, 540));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        btnGuardar.setBackground(new java.awt.Color(204, 255, 204));
+        lblTitulo.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        lblTitulo.setForeground(new java.awt.Color(70, 52, 35));
+        lblTitulo.setText("Usuarios");
+        add(lblTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(25, 15, 300, 30));
+
+        lblDescripcion.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        lblDescripcion.setForeground(new java.awt.Color(140, 120, 95));
+        lblDescripcion.setText("Registro de usuarios para el login.");
+        add(lblDescripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(95, 42, -1, -1));
+
+        pnlTarjeta.setBackground(new java.awt.Color(255, 255, 255));
+        pnlTarjeta.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(205, 195, 170)));
+        pnlTarjeta.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        lblId.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblId.setForeground(new java.awt.Color(70, 52, 35));
+        lblId.setText("Id");
+        pnlTarjeta.add(lblId, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 40, -1));
+
+        btnBuscar.setBackground(new java.awt.Color(247, 242, 228));
+        btnBuscar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnBuscar.setForeground(new java.awt.Color(70, 52, 35));
+        btnBuscar.setText("...");
+        btnBuscar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(205, 195, 170)));
+        pnlTarjeta.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 30, 30, 30));
+
+        lblEstado1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblEstado1.setForeground(new java.awt.Color(70, 52, 35));
+        lblEstado1.setText("Estado");
+        pnlTarjeta.add(lblEstado1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 150, 50, -1));
+
+        cmbEstado.setBackground(new java.awt.Color(255, 255, 255));
+        cmbEstado.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        cmbEstado.setForeground(new java.awt.Color(70, 52, 35));
+        cmbEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Activo", "Inactivo" }));
+        cmbEstado.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(205, 195, 170)));
+        pnlTarjeta.add(cmbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 170, 160, 28));
+
+        txtId.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        pnlTarjeta.add(txtId, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 120, -1));
+
+        lblCedula.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblCedula.setForeground(new java.awt.Color(70, 52, 35));
+        lblCedula.setText("Cedula:");
+        pnlTarjeta.add(lblCedula, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 10, -1, -1));
+
+        txtCedula.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        pnlTarjeta.add(txtCedula, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 30, 140, -1));
+
+        lblNombre.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblNombre.setForeground(new java.awt.Color(70, 52, 35));
+        lblNombre.setText("Nombre Completo:");
+        pnlTarjeta.add(lblNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 10, -1, -1));
+
+        txtNombre.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        pnlTarjeta.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 30, 140, -1));
+
+        lblUser.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblUser.setForeground(new java.awt.Color(70, 52, 35));
+        lblUser.setText("Nombre Usuario:");
+        pnlTarjeta.add(lblUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, -1, -1));
+
+        txtUser.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        pnlTarjeta.add(txtUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 140, -1));
+
+        lblClave.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblClave.setForeground(new java.awt.Color(70, 52, 35));
+        lblClave.setText("Clave:");
+        pnlTarjeta.add(lblClave, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 80, -1, -1));
+
+        pswClave.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        pswClave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pswClaveActionPerformed(evt);
+            }
+        });
+        pnlTarjeta.add(pswClave, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 100, 140, -1));
+
+        btnGuardar.setBackground(new java.awt.Color(86, 140, 72));
         btnGuardar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnGuardar.setText("  Guardar");
         btnGuardar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -103,9 +190,9 @@ public class PnlUsuario extends JPanel {
                 btnGuardarActionPerformed(evt);
             }
         });
-        add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 310, 140, 37));
+        pnlTarjeta.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 240, 140, 37));
 
-        btnBorrar.setBackground(new java.awt.Color(255, 153, 153));
+        btnBorrar.setBackground(new java.awt.Color(184, 84, 60));
         btnBorrar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnBorrar.setText("  Borrar");
         btnBorrar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED, null, java.awt.Color.gray, null, null));
@@ -115,92 +202,45 @@ public class PnlUsuario extends JPanel {
                 btnBorrarActionPerformed(evt);
             }
         });
-        add(btnBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 310, 140, 37));
+        pnlTarjeta.add(btnBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 240, 140, 37));
 
+        lblRol.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblRol.setText("Rol:");
+        pnlTarjeta.add(lblRol, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 80, -1, -1));
+
+        cmbRol.setBackground(new java.awt.Color(255, 255, 255));
+        cmbRol.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        cmbRol.setForeground(new java.awt.Color(70, 52, 35));
+        cmbRol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Normal", "Admin" }));
+        cmbRol.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(205, 195, 170)));
+        pnlTarjeta.add(cmbRol, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 100, 160, 28));
+
+        add(pnlTarjeta, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, 600, 290));
+
+        pnlSubrayado2.setBackground(new java.awt.Color(232, 178, 58));
+        add(pnlSubrayado2, new org.netbeans.lib.awtextra.AbsoluteConstraints(25, 50, 60, 4));
+
+        jScrollPane2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(205, 195, 170)));
+        jScrollPane2.setViewportBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(205, 195, 170)));
+
+        tblEmpleados.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         tblEmpleados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Title 1"
+
             }
         ));
+        tblEmpleados.setFillsViewportHeight(true);
         tblEmpleados.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblEmpleadosMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(tblEmpleados);
+        jScrollPane2.setViewportView(tblEmpleados);
 
-        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 400, 610, 193));
-
-        jPanel1.setBackground(new java.awt.Color(153, 255, 204));
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 102, 102)));
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        lblTitulo.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        lblTitulo.setForeground(new java.awt.Color(0, 102, 51));
-        lblTitulo.setText("Empleados");
-        jPanel1.add(lblTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 10, -1, -1));
-
-        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 650, 50));
-
-        lblId.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        lblId.setText("Id:");
-        add(lblId, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 100, -1, -1));
-
-        lblCedula.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        lblCedula.setText("Cedula:");
-        add(lblCedula, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 100, -1, -1));
-
-        lblNombre.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        lblNombre.setText("Nombre Completo:");
-        add(lblNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 150, -1, -1));
-
-        lblUser.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        lblUser.setText("Nombre Usuario:");
-        add(lblUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 150, -1, -1));
-
-        lblClave.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        lblClave.setText("Clave:");
-        add(lblClave, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 190, -1, -1));
-
-        lblRol.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        lblRol.setText("Rol:");
-        add(lblRol, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 190, -1, -1));
-
-        lblEstado.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        lblEstado.setText("Estado:");
-        add(lblEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 230, -1, -1));
-
-        txtUser.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        add(txtUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 150, 140, -1));
-
-        txtId.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        add(txtId, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 100, 120, -1));
-
-        txtCedula.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        add(txtCedula, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 100, 140, -1));
-
-        txtNombre.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 150, 120, -1));
-
-        pswClave.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        pswClave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                pswClaveActionPerformed(evt);
-            }
-        });
-        add(pswClave, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 190, 140, -1));
-
-        cmbRol.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        cmbRol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Normal", "Admin" }));
-        add(cmbRol, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 190, 120, -1));
-
-        cmbEstado.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        cmbEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Inactivo", "Activo" }));
-        cmbEstado.setSelectedIndex(1);
-        add(cmbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 230, 140, -1));
+        add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 400, 600, 210));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
@@ -284,35 +324,40 @@ public class PnlUsuario extends JPanel {
         }*/
     }//GEN-LAST:event_btnBorrarActionPerformed
 
+    private void pswClaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pswClaveActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_pswClaveActionPerformed
+
     private void tblEmpleadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblEmpleadosMouseClicked
         // TODO add your handling code here:
         // La fila de la tabla coincide con la posición del empleado en la lista
-      /*  int fila = tblEmpleados.getSelectedRow();
+        /*  int fila = tblEmpleados.getSelectedRow();
         if (fila != -1){
             cargarEmpleado(almacen.listarEmpleados().get(fila));
         }*/
     }//GEN-LAST:event_tblEmpleadosMouseClicked
 
-    private void pswClaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pswClaveActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_pswClaveActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBorrar;
+    private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JComboBox<String> cmbEstado;
     private javax.swing.JComboBox<String> cmbRol;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblCedula;
     private javax.swing.JLabel lblClave;
-    private javax.swing.JLabel lblEstado;
+    private javax.swing.JLabel lblDescripcion;
+    private javax.swing.JLabel lblEstado1;
     private javax.swing.JLabel lblId;
     private javax.swing.JLabel lblNombre;
     private javax.swing.JLabel lblRol;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JLabel lblUser;
+    private javax.swing.JPanel pnlSubrayado;
+    private javax.swing.JPanel pnlSubrayado1;
+    private javax.swing.JPanel pnlSubrayado2;
+    private javax.swing.JPanel pnlTarjeta;
     private javax.swing.JPasswordField pswClave;
     private javax.swing.JTable tblEmpleados;
     private javax.swing.JTextField txtCedula;

@@ -234,7 +234,7 @@ public class FrmLogin extends javax.swing.JFrame {
             //--Se toma el usuario encontrado para revisar su estado
             ObjUsuario miUsuario = misMetodos.validarLogin(usuario, clave);
             
-            if (miUsuario.getEstado() == 1) { //-- 1 Activo
+            if (miUsuario.getEstado() == 0) { //-- 1 Activo
                 FrmHome prc = new FrmHome();
                 prc.setLocationRelativeTo(null);
                 prc.setVisible(true);

@@ -17,7 +17,7 @@ import java.io.IOException;
  *
  * @author triamus
  * 
- * usuarios, cultivos
+ * usuarios, cultivos, Agroquimico, aplicacion
  */
 public class ArchivosE {
     
@@ -29,6 +29,7 @@ public class ArchivosE {
     EstructuraUser almacen = new EstructuraUser();
     EstructuraCultivo almacenCulti = new EstructuraCultivo();
     EstructuraAgroquimico almacenAgro = new EstructuraAgroquimico();
+    EstructuraAplicacion almacenApli = new EstructuraAplicacion();
     
     //mensaje de error
     public void aviso(IOException e){
@@ -314,6 +315,187 @@ public class ArchivosE {
         }
     }
     
+    
+    //metodos para escribir aplicaciones y leer en el json
+    public void escribeAplicacion(){
+        try {
+            ArrayList<ObjAplicacion> miLista = almacenApli.listarAplicacion();
+            StringBuilder jsonContructor = new StringBuilder();
+            
+            jsonContructor.append("[\n");
+            
+            for (int i = 0; i < miLista.size(); i++) {
+                ObjAplicacion aplicacion = miLista.get(i);
+                
+                jsonContructor.append("  {\n");
+                jsonContructor.append("    \"id\": ").append(aplicacion.getId()).append(",\n");
+                jsonContructor.append("    \"Nombre\": \"").append(aplicacion.getNombre()).append("\",\n");
+                jsonContructor.append("    \"Justificacion\": \"").append(aplicacion.getJustificacion()).append("\",\n");
+                jsonContructor.append("    \"Estado\": \"").append(aplicacion.getEstado()).append("\",\n");
+                jsonContructor.append("    \"Detalle\": [\n");
+                
+             
+            for (int d = 0; d < aplicacion.getDetalle().size(); d++) {
+
+                //Tomamos un detalle en la posición d
+                ObjDetalleAplicacion linea = aplicacion.getDetalle().get(d);
+
+                //Abrimos un objeto JSON para este detalle
+                jsonContructor.append("      {\n");
+                jsonContructor.append("        \"producto\": \"").append(linea.getProducto()).append("\"\n");
+
+                //Si no es el último detalle, agregamos coma
+                if (d < aplicacion.getDetalle().size() - 1) {
+                    jsonContructor.append("      },\n");
+                } else {
+                    jsonContructor.append("      }\n");
+                }
+            }
+
+            // Cerramos el arreglo JSON de Detalle
+            jsonContructor.append("    ]\n");
+                
+                //validamos pata saber si es el ultimo obj o hay mas para poner una coma o no
+                if (i < miLista.size() - 1) {
+                    jsonContructor.append("  },\n");
+                }else{
+                    jsonContructor.append("   }\n");
+                }
+            }
+            
+            jsonContructor.append("]");
+            
+            //escribimos
+            FileWriter escritor = new FileWriter("Aplicacion.json");
+            escritor.write(jsonContructor.toString());
+            escritor.close();
+            
+            System.out.println("Aplicacion guardados exitosamente en JSON.");
+        } catch (IOException e) {
+            aviso(e);
+        }
+    }
+ 
+        //-------Método para leer las aplicaciones desde formato JSON
+    public void leerAplicaciones() {
+        File archivo = new File("Aplicacion.json");
+        if (!archivo.exists()) {
+            System.out.println("El archivo Aplicacion.json no existe todavía.");
+            return;
+        }
+
+        try {
+            FileReader miArchivo = new FileReader(archivo);
+            BufferedReader lector = new BufferedReader(miArchivo);
+
+            StringBuilder contenido = new StringBuilder();
+            String linea = lector.readLine();
+
+            // Leemos todo el archivo JSON y quitamos espacios extras de cada línea
+            while (linea != null) {
+                contenido.append(linea.trim());
+                linea = lector.readLine();
+            }
+            lector.close();
+
+            String textoJson = contenido.toString().trim();
+
+            // Si está vacío
+            if (textoJson.equals("[]") || textoJson.isEmpty()) {
+                return;
+            }
+
+            
+
+            //  Quitamos el corchete inicial y el corchete final
+            textoJson = textoJson.substring(1, textoJson.length() - 1).trim();
+
+            // 3. Separamos cada objeto de aplicación usando la marca de cierre del arreglo Detalle
+            // y la apertura del siguiente objeto
+            String[] objetosApp = textoJson.split("\\]\\s*,\\s*\\{");
+
+            for (int i = 0; i < objetosApp.length; i++) {
+                String objStr = objetosApp[i].trim();
+
+                // que no tenga los corchetes
+                objStr = objStr.replace("[", "").replace("]", "");
+
+                //Separamos la parte de Detalle del resto de campos de la aplicación
+                String[] partesDetalle = objStr.split("\"Detalle\"\\s*:");
+                String cabeceraApp = partesDetalle[0];
+
+                // Limpiamos llaves y comillas de los campos principales de ObjAplicacion
+                String limpioCabecera = cabeceraApp
+                        .replace("{", "")
+                        .replace("}", "")
+                        .replace("\"", "")
+                        .trim();
+
+                String[] camposApp = limpioCabecera.split(",");
+                ObjAplicacion aplicacion = new ObjAplicacion();
+
+                for (int j = 0; j < camposApp.length; j++) {
+                    String[] par = camposApp[j].split(":");
+                    if (par.length >= 2) {
+                        String clave = par[0].trim();
+                        String valor = par[1].trim();
+
+                        switch (clave) {
+                            case "id":
+                                aplicacion.setId(Integer.parseInt(valor));
+                                break;
+                            case "Nombre":
+                                aplicacion.setNombre(valor);
+                                break;
+                            case "Justificacion":
+                                aplicacion.setJustificacion(valor);
+                                break;
+                            case "Estado":
+                                aplicacion.setEstado(Integer.parseInt(valor));
+                                break;
+                        }
+                    }
+                }
+
+                // Si existe la secciónDetalle, recorremos cada producto y lo agregamos
+                if (partesDetalle.length >= 2) {
+                    String detalleTexto = partesDetalle[1].trim();
+
+                    // Quitamos llaves y comillas para trabajar cada par clave:valor
+                    String limpioDetalle = detalleTexto
+                            .replace("{", "")
+                            .replace("}", "")
+                            .replace("\"", "")
+                            .trim();
+
+                    if (!limpioDetalle.isEmpty()) {
+                        String[] elementosDetalle = limpioDetalle.split(",");
+
+                        for (int d = 0; d < elementosDetalle.length; d++) {
+                            String[] parProducto = elementosDetalle[d].split(":");
+                            if (parProducto.length >= 2) {
+                                String claveProd = parProducto[0].trim();
+                                String valorProd = parProducto[1].trim();
+
+                                if (claveProd.equals("producto") && !valorProd.isEmpty()) {
+                                    aplicacion.agregarLinea(new ObjDetalleAplicacion(valorProd));
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Guardamos la aplicación completa (con su lista de detalles) en EstructuraAplicacion
+                almacenApli.agregarAplicacion(aplicacion);
+            }
+
+            System.out.println("Aplicaciones leídas correctamente desde JSON.");
+
+        } catch (IOException | NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, e.toString(), "Atencion", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     //-------Método para escribir los Agro Quimicos en formato JSON-------
     public void escribeAgroquimicos(){
         try {

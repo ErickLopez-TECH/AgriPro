@@ -433,48 +433,15 @@ public class FrmHome extends javax.swing.JFrame {
     private void btnLotesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLotesActionPerformed
         // TODO add your handling code here:
         pnlSubReportes.setVisible(false);
-       // mostrarPanel(new PnlLiquidacion(usuarioActual));
+        mostrarPanel(new PnlAplicaciones());
 
     }//GEN-LAST:event_btnLotesActionPerformed
 
     private void btnAplicacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAplicacionesActionPerformed
         // TODO add your handling code here:
         pnlSubReportes.setVisible(false);
-        
-       /* if(!btnPress){
-            ObjViatico miViatico1= new  ObjViatico();
-            MetodosViatico viaticosMetodos = new MetodosViatico();
-            EstructuraViaticos almacen = new EstructuraViaticos();
-
-            miViatico1.setId(viaticosMetodos.siguienteViatico());
-            miViatico1.setNombre("Desayuno");
-            miViatico1.setMonto(3000);
-            miViatico1.setEstado(0);
-
-            almacen.agregarViatico(miViatico1);
-            
-            ObjViatico miViatico2= new  ObjViatico();
-           
-            miViatico2.setId(viaticosMetodos.siguienteViatico());
-            miViatico2.setNombre("Almuerzo");
-            miViatico2.setMonto(5000);
-            miViatico2.setEstado(0);
-
-            almacen.agregarViatico(miViatico2);
-            
-            ObjViatico miViatico3= new  ObjViatico();
-           
-            miViatico3.setId(viaticosMetodos.siguienteViatico());
-            miViatico3.setNombre("Cena");
-            miViatico3.setMonto(5000);
-            miViatico3.setEstado(0);
-
-            almacen.agregarViatico(miViatico3);
-            
-            btnPress = true;
-        }else{
-            JOptionPane.showMessageDialog(this, "Ya has cargado los registros","Proteccion contra duplicados",JOptionPane.INFORMATION_MESSAGE);
-        }*/
+        mostrarPanel(new PnlAplicaciones());
+       
     }//GEN-LAST:event_btnAplicacionesActionPerformed
 
     private void btnUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuariosActionPerformed
