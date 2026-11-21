@@ -461,7 +461,7 @@ public class FrmHome extends javax.swing.JFrame {
     private void btnRepCalendarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRepCalendarioActionPerformed
         // TODO add your handling code here:
         pnlSubReportes.setVisible(false);
-       // mostrarPanel(new PnlRepCFech());
+       //mostrarPanel(new PnlCalendarioAplicaciones());
 
     }//GEN-LAST:event_btnRepCalendarioActionPerformed
 

@@ -23,6 +23,7 @@ public class AgriPro {
         arch.crearArchivos("Usuarios");
         arch.crearArchivos("Cultivos");
         arch.crearArchivos("Agroquimicos");
+        arch.crearArchivos("Aplicacion");
         
     }
     
@@ -30,6 +31,7 @@ public class AgriPro {
         arch.leerUsuarios();
         arch.leerCultivos();
         arch.leerAgroquimicos();
+        arch.leerAplicaciones();
     }
     
     public static void main(String[] args) {

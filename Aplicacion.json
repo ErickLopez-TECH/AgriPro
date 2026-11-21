@@ -1,0 +1,13 @@
+[
+  {
+    "id": 1,
+    "Nombre": "Aplicacion para tomates",
+    "Justificacion": "Agregar a los tomates",
+    "Estado": 0,
+    "Detalle": [
+      {
+        "producto": "Gramoxon 1L=1"
+      }
+    ]
+   }
+]

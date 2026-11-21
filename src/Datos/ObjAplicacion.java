@@ -31,7 +31,7 @@ public class ObjAplicacion {
     
     
     
-    public String getNumero(){
+    public String getIdFormat(){
         return String.format("APL-%04d", id);
     }
     //setters

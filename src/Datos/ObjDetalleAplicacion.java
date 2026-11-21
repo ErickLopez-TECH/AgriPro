@@ -10,21 +10,23 @@ package Datos;
  */
 public class ObjDetalleAplicacion {
     
+    
     private String producto;
 
     public ObjDetalleAplicacion() {
     }
 
     public ObjDetalleAplicacion(String producto) {
+        
         this.producto = producto;
     }
-    
+  
     //setters
 
     public void setProducto(String producto) {
         this.producto = producto;
     }
-    
+   
     //getters
 
     public String getProducto() {
