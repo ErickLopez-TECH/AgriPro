@@ -4,6 +4,16 @@
  */
 package Presentacion;
 
+import Datos.ArchivosE;
+import Datos.EstructuraAplicacion;
+import Datos.ObjAplicacion;
+import Datos.ObjDetalleAplicacion;
+import Logica.MetodosAplicaciones;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author triamus
@@ -13,8 +23,25 @@ public class PnlAplicaciones extends javax.swing.JPanel {
     /**
      * Creates new form PnlAplicaciones
      */
+    private final ArrayList<ObjDetalleAplicacion> lineasTemp = new ArrayList<>(); 
+    MetodosAplicaciones metodosApli = new MetodosAplicaciones();
+    EstructuraAplicacion almacen = new EstructuraAplicacion();
+    private boolean modificar = false;
+    private int indiceEditando = -1;
+    ArchivosE arch = new ArchivosE();
+    
     public PnlAplicaciones() {
         initComponents();
+        
+        tblAplicaciones.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tblAplicaciones.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                mostrarDetalle();
+            }
+        });
+        
+        refrescarAplicaciones();
+        nuevaAplicacion();
     }
 
     /**
@@ -29,18 +56,20 @@ public class PnlAplicaciones extends javax.swing.JPanel {
         lblTitulo = new javax.swing.JLabel();
         lblDescripcion2 = new javax.swing.JLabel();
         txtCampo1 = new javax.swing.JTextField();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanel1 = new javax.swing.JPanel();
+        tabs = new javax.swing.JTabbedPane();
+        pnlConsulta = new javax.swing.JPanel();
         lblTituloConsultar = new javax.swing.JLabel();
         lblDescripcion = new javax.swing.JLabel();
         pnlSubrayado1 = new javax.swing.JPanel();
         lblDecripcionApli = new javax.swing.JLabel();
-        jScrollPane3 = new javax.swing.JScrollPane();
+        scrAplicacion = new javax.swing.JScrollPane();
         tblAplicaciones = new javax.swing.JTable();
         lblDecripcionDetalle = new javax.swing.JLabel();
-        jScrollPane4 = new javax.swing.JScrollPane();
+        scrDetallers = new javax.swing.JScrollPane();
         tblDetalles = new javax.swing.JTable();
-        jPanel2 = new javax.swing.JPanel();
+        btnConsultar = new javax.swing.JButton();
+        btnBorrar2 = new javax.swing.JButton();
+        pnlAgregar = new javax.swing.JPanel();
         lblTituloAgregar = new javax.swing.JLabel();
         pnlSubrayado = new javax.swing.JPanel();
         lblDescripcionAdd = new javax.swing.JLabel();
@@ -59,10 +88,11 @@ public class PnlAplicaciones extends javax.swing.JPanel {
         txtEspacioInvisible = new javax.swing.JTextField();
         txtNameProd = new javax.swing.JTextField();
         btnAddLinea = new javax.swing.JButton();
-        jScrollPane5 = new javax.swing.JScrollPane();
+        scrLineas = new javax.swing.JScrollPane();
         tblLineAgro = new javax.swing.JTable();
         btnGuardar = new javax.swing.JButton();
-        btnBorrar = new javax.swing.JButton();
+        btnQuitarLinea = new javax.swing.JButton();
+        lblTotal = new javax.swing.JLabel();
 
         lblTitulo.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         lblTitulo.setForeground(new java.awt.Color(70, 52, 35));
@@ -74,31 +104,31 @@ public class PnlAplicaciones extends javax.swing.JPanel {
 
         txtCampo1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(205, 195, 170)));
 
-        jTabbedPane1.setBackground(new java.awt.Color(232, 178, 58));
+        tabs.setBackground(new java.awt.Color(232, 178, 58));
 
-        jPanel1.setBackground(new java.awt.Color(247, 242, 228));
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        pnlConsulta.setBackground(new java.awt.Color(247, 242, 228));
+        pnlConsulta.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblTituloConsultar.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         lblTituloConsultar.setForeground(new java.awt.Color(70, 52, 35));
         lblTituloConsultar.setText("Consultar Aplicaciones");
-        jPanel1.add(lblTituloConsultar, new org.netbeans.lib.awtextra.AbsoluteConstraints(25, 15, 300, 30));
+        pnlConsulta.add(lblTituloConsultar, new org.netbeans.lib.awtextra.AbsoluteConstraints(25, 15, 300, 30));
 
         lblDescripcion.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         lblDescripcion.setForeground(new java.awt.Color(140, 120, 95));
         lblDescripcion.setText("Consulta todas las aplicaciones guardadas");
-        jPanel1.add(lblDescripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(95, 42, -1, -1));
+        pnlConsulta.add(lblDescripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(95, 42, -1, -1));
 
         pnlSubrayado1.setBackground(new java.awt.Color(232, 178, 58));
-        jPanel1.add(pnlSubrayado1, new org.netbeans.lib.awtextra.AbsoluteConstraints(25, 50, 60, 4));
+        pnlConsulta.add(pnlSubrayado1, new org.netbeans.lib.awtextra.AbsoluteConstraints(25, 50, 60, 4));
 
         lblDecripcionApli.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         lblDecripcionApli.setForeground(new java.awt.Color(140, 120, 95));
         lblDecripcionApli.setText("Aplicaciones guardadas, seleccione una para mostrar los detalles");
-        jPanel1.add(lblDecripcionApli, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, -1));
+        pnlConsulta.add(lblDecripcionApli, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, -1));
 
-        jScrollPane3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(205, 195, 170)));
-        jScrollPane3.setViewportBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(205, 195, 170)));
+        scrAplicacion.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(205, 195, 170)));
+        scrAplicacion.setViewportBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(205, 195, 170)));
 
         tblAplicaciones.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         tblAplicaciones.setModel(new javax.swing.table.DefaultTableModel(
@@ -106,26 +136,34 @@ public class PnlAplicaciones extends javax.swing.JPanel {
 
             },
             new String [] {
-
+                "ID", "Nombre", "Justificacion"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tblAplicaciones.setFillsViewportHeight(true);
         tblAplicaciones.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblAplicacionesMouseClicked(evt);
             }
         });
-        jScrollPane3.setViewportView(tblAplicaciones);
+        scrAplicacion.setViewportView(tblAplicaciones);
 
-        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, 600, 180));
+        pnlConsulta.add(scrAplicacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, 600, 150));
 
         lblDecripcionDetalle.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         lblDecripcionDetalle.setForeground(new java.awt.Color(140, 120, 95));
         lblDecripcionDetalle.setText("Detalles de la aplicacion: ");
-        jPanel1.add(lblDecripcionDetalle, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, -1, -1));
+        pnlConsulta.add(lblDecripcionDetalle, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, -1, -1));
 
-        jScrollPane4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(205, 195, 170)));
-        jScrollPane4.setViewportBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(205, 195, 170)));
+        scrDetallers.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(205, 195, 170)));
+        scrDetallers.setViewportBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(205, 195, 170)));
 
         tblDetalles.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         tblDetalles.setModel(new javax.swing.table.DefaultTableModel(
@@ -133,22 +171,48 @@ public class PnlAplicaciones extends javax.swing.JPanel {
 
             },
             new String [] {
-
+                "Id", "Agroquimico"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tblDetalles.setFillsViewportHeight(true);
         tblDetalles.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblDetallesMouseClicked(evt);
             }
         });
-        jScrollPane4.setViewportView(tblDetalles);
+        scrDetallers.setViewportView(tblDetalles);
 
-        jPanel1.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 340, 600, 180));
+        pnlConsulta.add(scrDetallers, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 340, 600, 180));
 
-        jTabbedPane1.addTab("Consultar", jPanel1);
+        btnConsultar.setBackground(new java.awt.Color(232, 178, 58));
+        btnConsultar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnConsultar.setForeground(new java.awt.Color(255, 255, 255));
+        btnConsultar.setText("Modificar");
+        btnConsultar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnConsultar.setBorderPainted(false);
+        btnConsultar.addActionListener(this::btnConsultarActionPerformed);
+        pnlConsulta.add(btnConsultar, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 260, 130, 40));
 
-        jPanel2.setBackground(new java.awt.Color(247, 242, 228));
+        btnBorrar2.setBackground(new java.awt.Color(184, 84, 60));
+        btnBorrar2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnBorrar2.setForeground(new java.awt.Color(255, 255, 255));
+        btnBorrar2.setText("  Borrar");
+        btnBorrar2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnBorrar2.setBorderPainted(false);
+        btnBorrar2.addActionListener(this::btnBorrar2ActionPerformed);
+        pnlConsulta.add(btnBorrar2, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 260, 130, 40));
+
+        tabs.addTab("Consultar", pnlConsulta);
+
+        pnlAgregar.setBackground(new java.awt.Color(247, 242, 228));
 
         lblTituloAgregar.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         lblTituloAgregar.setForeground(new java.awt.Color(70, 52, 35));
@@ -164,7 +228,11 @@ public class PnlAplicaciones extends javax.swing.JPanel {
         lblId.setForeground(new java.awt.Color(70, 52, 35));
         lblId.setText("Id");
 
+        txtId.setEditable(false);
+        txtId.setFont(new java.awt.Font("sansserif", 1, 13)); // NOI18N
+        txtId.setForeground(new java.awt.Color(0, 0, 0));
         txtId.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(205, 195, 170)));
+        txtId.setEnabled(false);
 
         lblNombreApp.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblNombreApp.setForeground(new java.awt.Color(70, 52, 35));
@@ -206,9 +274,10 @@ public class PnlAplicaciones extends javax.swing.JPanel {
         btnAddLinea.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnAddLinea.setForeground(new java.awt.Color(70, 52, 35));
         btnAddLinea.setText("Agregar Linea");
+        btnAddLinea.addActionListener(this::btnAddLineaActionPerformed);
 
-        jScrollPane5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(205, 195, 170)));
-        jScrollPane5.setViewportBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(205, 195, 170)));
+        scrLineas.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(205, 195, 170)));
+        scrLineas.setViewportBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(205, 195, 170)));
 
         tblLineAgro.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         tblLineAgro.setModel(new javax.swing.table.DefaultTableModel(
@@ -216,16 +285,24 @@ public class PnlAplicaciones extends javax.swing.JPanel {
 
             },
             new String [] {
-
+                "Id", "AgroQuimico"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tblLineAgro.setFillsViewportHeight(true);
         tblLineAgro.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblLineAgroMouseClicked(evt);
             }
         });
-        jScrollPane5.setViewportView(tblLineAgro);
+        scrLineas.setViewportView(tblLineAgro);
 
         btnGuardar.setBackground(new java.awt.Color(86, 140, 72));
         btnGuardar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -234,59 +311,63 @@ public class PnlAplicaciones extends javax.swing.JPanel {
         btnGuardar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnGuardar.addActionListener(this::btnGuardarActionPerformed);
 
-        btnBorrar.setBackground(new java.awt.Color(184, 84, 60));
-        btnBorrar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnBorrar.setForeground(new java.awt.Color(255, 255, 255));
-        btnBorrar.setText("  Borrar");
-        btnBorrar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        btnBorrar.setBorderPainted(false);
-        btnBorrar.addActionListener(this::btnBorrarActionPerformed);
+        btnQuitarLinea.setBackground(new java.awt.Color(232, 178, 58));
+        btnQuitarLinea.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnQuitarLinea.setForeground(new java.awt.Color(255, 255, 255));
+        btnQuitarLinea.setText("Quitar Linea");
+        btnQuitarLinea.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnQuitarLinea.setBorderPainted(false);
+        btnQuitarLinea.addActionListener(this::btnQuitarLineaActionPerformed);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
+        lblTotal.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblTotal.setForeground(new java.awt.Color(70, 52, 35));
+        lblTotal.setText("Cantidad de productos:");
+
+        javax.swing.GroupLayout pnlAgregarLayout = new javax.swing.GroupLayout(pnlAgregar);
+        pnlAgregar.setLayout(pnlAgregarLayout);
+        pnlAgregarLayout.setHorizontalGroup(
+            pnlAgregarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlAgregarLayout.createSequentialGroup()
+                .addGroup(pnlAgregarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlAgregarLayout.createSequentialGroup()
                         .addGap(15, 15, 15)
                         .addComponent(jSeparator1))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addGroup(pnlAgregarLayout.createSequentialGroup()
+                        .addGroup(pnlAgregarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlAgregarLayout.createSequentialGroup()
                                 .addGap(25, 25, 25)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(pnlAgregarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(pnlAgregarLayout.createSequentialGroup()
                                         .addComponent(pnlSubrayado, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(10, 10, 10)
                                         .addComponent(lblDescripcionAdd))
                                     .addComponent(lblTituloAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addGroup(pnlAgregarLayout.createSequentialGroup()
                                 .addGap(28, 28, 28)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(pnlAgregarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(pnlAgregarLayout.createSequentialGroup()
                                         .addComponent(lblJustificacion)
                                         .addGap(18, 18, 18)
                                         .addComponent(txtJustificacion))
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                    .addGroup(pnlAgregarLayout.createSequentialGroup()
                                         .addComponent(lblId, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(64, 64, 64)
                                         .addComponent(lblNombreApp)))
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(pnlAgregarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(pnlAgregarLayout.createSequentialGroup()
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(txtNombreApp, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                    .addGroup(pnlAgregarLayout.createSequentialGroup()
                                         .addGap(27, 27, 27)
                                         .addComponent(lblEstado)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(cmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addGroup(pnlAgregarLayout.createSequentialGroup()
                                 .addGap(27, 27, 27)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(pnlAgregarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(pnlAgregarLayout.createSequentialGroup()
                                         .addComponent(lblIdProdu)
                                         .addGap(18, 18, 18)
                                         .addComponent(txtIdProd, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -296,39 +377,42 @@ public class PnlAplicaciones extends javax.swing.JPanel {
                                         .addComponent(txtNameProd, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(btnAddLinea, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(pnlAgregarLayout.createSequentialGroup()
+                                        .addGroup(pnlAgregarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addGroup(pnlAgregarLayout.createSequentialGroup()
+                                                .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(306, 306, 306)
+                                                .addComponent(btnQuitarLinea, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(scrLineas, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(txtEspacioInvisible, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addGap(0, 23, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(41, 41, 41)
-                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnBorrar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(50, 50, 50)))
+                        .addGap(0, 23, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlAgregarLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(lblTotal)
+                .addGap(88, 88, 88))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        pnlAgregarLayout.setVerticalGroup(
+            pnlAgregarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlAgregarLayout.createSequentialGroup()
                 .addGap(15, 15, 15)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(pnlAgregarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlAgregarLayout.createSequentialGroup()
                         .addGap(35, 35, 35)
                         .addComponent(pnlSubrayado, javax.swing.GroupLayout.PREFERRED_SIZE, 4, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addGroup(pnlAgregarLayout.createSequentialGroup()
                         .addGap(27, 27, 27)
                         .addComponent(lblDescripcionAdd))
                     .addComponent(lblTituloAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(32, 32, 32)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(pnlAgregarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblId)
                     .addComponent(lblNombreApp)
                     .addComponent(txtNombreApp, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(pnlAgregarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblJustificacion)
                     .addComponent(txtJustificacion, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblEstado)
@@ -336,42 +420,150 @@ public class PnlAplicaciones extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(pnlAgregarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblIdProdu)
                     .addComponent(txtIdProd, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblNameProd)
                     .addComponent(txtNameProd, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAddLinea, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(pnlAgregarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlAgregarLayout.createSequentialGroup()
                         .addGap(35, 35, 35)
                         .addComponent(txtEspacioInvisible, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addGroup(pnlAgregarLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(64, 64, 64)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(scrLineas, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lblTotal)
+                .addGap(35, 35, 35)
+                .addGroup(pnlAgregarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnBorrar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnQuitarLinea, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("Agregar", jPanel2);
+        tabs.addTab("Agregar", pnlAgregar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 662, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(tabs, javax.swing.GroupLayout.PREFERRED_SIZE, 662, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addComponent(tabs)
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void nuevaAplicacion() {
+        lineasTemp.clear();
+        txtId.setText(String.format("APL-%04d", metodosApli.siguienteAplicacion()));
+        
+        limpiarDetalle();
+        refrescarLineas();
+    }
+    
+    private void vaciarCampos(){
+        txtId.setText("");
+        txtNombreApp.setText("");
+        txtJustificacion.setText("");
+        txtIdProd.setText("");
+        txtNameProd.setText("");
+        cmbEstado.setSelectedIndex(0);
+        
+    }
+    
+    private void limpiarDetalle(){
+        txtIdProd.setText("");
+        txtNameProd.setText("");
+    }
+    
+    private void refrescarLineas() {
+        DefaultTableModel modelo = (DefaultTableModel) tblLineAgro.getModel();
+        modelo.setRowCount(0);
+        int total = 0;
+        
+        for (int i = 0; i < lineasTemp.size(); i++) {
+            
+            total = tblLineAgro.getRowCount()+1;
+            
+            ObjDetalleAplicacion l = lineasTemp.get(i);
+            
+            String[] partes = l.getProducto().split("=");
+            
+            
+            Object[] fila = { partes[1].trim(), partes[0].trim()
+            
+        };
+            modelo.addRow(fila);
+            
+        }
+        lblTotal.setText(String.valueOf("Cantidad de productos: "+total));
+    }
+    
+    private void refrescarAplicaciones() {
+        DefaultTableModel modelo = (DefaultTableModel) tblAplicaciones.getModel();
+        modelo.setRowCount(0);
+        
+        ArrayList<ObjAplicacion> lista = almacen.listarAplicacion();
+        for (int i = 0; i < lista.size(); i++) {
+            ObjAplicacion liqui= lista.get(i);
+            
+            Object[] fila = {
+                liqui.getIdFormat(), liqui.getNombre(),
+                liqui.getJustificacion(),
+                        
+            };
+            
+            modelo.addRow(fila);
+        }
+        
+        mostrarDetalle();
+    }
+    
+    //--Muestra las líneas de la aplicacion seleccionada en la pestaña Consultar
+    private void mostrarDetalle() {
+        DefaultTableModel modelo = (DefaultTableModel) tblDetalles.getModel();
+        modelo.setRowCount(0);
+        
+        int fila = tblAplicaciones.getSelectedRow();
+        ArrayList<ObjAplicacion> lista = almacen.listarAplicacion();//lista
+        
+        if (fila == -1 || fila >= lista.size()) {
+        lblDecripcionDetalle.setText("Detalles de la aplicacion:" );
+        return;
+    }
+        ObjAplicacion apli = lista.get(fila);
+        lblDecripcionDetalle.setText("Detalle de " + apli.getIdFormat());
+        
+        //lista para obtener del elemento de detalleApli--> debo de pasar del obj al alamcen
+        ArrayList<ObjDetalleAplicacion> detalles = apli.getDetalle();
+         for (int i = 0; i < detalles.size(); i++) {
+            ObjDetalleAplicacion l = detalles.get(i);
+            
+            String[] partes = l.getProducto().split("=");
+            
+            modelo.addRow(new Object[]{
+                partes[1].trim(),
+                partes[0].trim()
+                
+            });
+        }
+        
+    }
+    
+    private boolean validarCampos(){
+        
+        return true;
+    }
+    
+    private void aviso(String mensaje) {
+        JOptionPane.showMessageDialog(null, mensaje, "Aviso Importante", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
     private void tblAplicacionesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblAplicacionesMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_tblAplicacionesMouseClicked
@@ -382,104 +574,143 @@ public class PnlAplicaciones extends javax.swing.JPanel {
 
     private void tblLineAgroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLineAgroMouseClicked
         // TODO add your handling code here:
+        int fila = tblLineAgro.getSelectedRow();
+        if (fila !=-1) {
+            indiceEditando = fila;
+            
+            txtIdProd.setText(tblLineAgro.getValueAt(fila, 0).toString());
+            txtNameProd.setText(tblLineAgro.getValueAt(fila, 1).toString());
+           
+        }else{
+            aviso("Seleccione una fila para poder modificar");
+        }
     }//GEN-LAST:event_tblLineAgroMouseClicked
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
-        // 1. Obtener el id: si está vacío se asigna automático, si no, debe ser numérico
-        /*  int id = 0;
-        if (txtId.getText().equals("")){
-            id = misMetodos.siguienteEmpleado();
-        } else{
-            id = Integer.parseInt(txtId.getText());
-        }
-
-        String cedula = txtCedula.getText().trim();
-        String nombre = txtNombre.getText().trim();
-        String apellido1 = txtApellido1.getText().trim();
-        String apellido2 = txtApellido2.getText().trim();
-        String telefono = txtTelefono.getText().trim();
-        String direccion = txtDireccion.getText().trim();
-        int estado = cmbEstado.getSelectedIndex(); // 0:Inactivo | 1:Activo
-
-        // 2. Validar campos
-        String error = misMetodos.validarEmpleado(cedula, nombre, apellido1, apellido2, telefono, direccion);
-        if (!error.equals("")){
-            JOptionPane.showMessageDialog(null, error, "Aviso Importante", JOptionPane.WARNING_MESSAGE);
+        if (lineasTemp.isEmpty()) {
+            aviso("Debes de agregar al menos un agroquimico");
             return;
         }
-        if (misMetodos.cedulaDuplicada(cedula, id)){
-            JOptionPane.showMessageDialog(null, "Ya existe un empleado con esa cédula", "Aviso Importante", JOptionPane.WARNING_MESSAGE);
-            return;
+        
+        int id = 0;
+        String nombre = txtNombreApp.getText();
+        String justificacion = txtJustificacion.getText();
+        int estado = cmbEstado.getSelectedIndex();
+        
+        
+        if (!modificar) {
+            id = metodosApli.siguienteAplicacion();
+        }else{
+            
+            String textoId = txtId.getText();
+            String soloNumeros = textoId.replaceAll("[^0-9]", ""); 
+            
+            id = Integer.parseInt(soloNumeros);
         }
-
-        // 3. Crear o modificar
-        ObjEmpleado miEmpleado = new ObjEmpleado(id, cedula, nombre, apellido1, apellido2, telefono, direccion, estado);
-        int indice = misMetodos.buscarEmpleado(id);
-
-        if (indice == -1){
-            miEmpleado.setId(misMetodos.siguienteEmpleado());
-            almacen.agregarEmpleado(miEmpleado);
-            JOptionPane.showMessageDialog(null, "Empleado agregado correctamente");
-
-            movimiento = "Agrego";
-
-        } else{
-            almacen.editarEmpleado(indice, miEmpleado);
-            JOptionPane.showMessageDialog(null, "Empleado modificado correctamente");
-
-            movimiento = "Edito";
+        
+        //empaquetar
+        ObjAplicacion miAplicacion = new ObjAplicacion(id, nombre, justificacion, estado);
+        
+        int indice = metodosApli.buscarApliIndice(id);
+        
+        for (int i = 0; i < lineasTemp.size(); i++) {
+            ObjDetalleAplicacion l = lineasTemp.get(i);
+            
+            miAplicacion.agregarLinea(l);
         }
-
-        int idBitacora = metodosBita.siguienteBitacora();
-
-        ObjBitacora miBitacora = new ObjBitacora(idBitacora, nombreUser, seccion, movimiento);
-        almacenBitacora.agregarBitacora(miBitacora);
-
-        tblEmpleados.setModel(almacen.mostrarEmpleados());
-        limpiarCampos();*/
+        
+        if(!modificar){
+            almacen.agregarAplicacion(miAplicacion);
+            
+            
+        }else{
+            almacen.editarAplicacion(indice, miAplicacion);
+            
+           
+            modificar = false;
+        }
+        
+        refrescarAplicaciones();
+        aviso("Se guardo" + miAplicacion.getIdFormat());
+        nuevaAplicacion();
+        arch.escribeAplicacion();
     }//GEN-LAST:event_btnGuardarActionPerformed
 
-    private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
+    private void btnAddLineaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddLineaActionPerformed
         // TODO add your handling code here:
-        /*  if (txtId.getText().equals("")){
-            JOptionPane.showMessageDialog(null, "Seleccione o busque un empleado para borrar", "Aviso Importante", JOptionPane.WARNING_MESSAGE);
-            return;
+        String name = txtNameProd.getText() + "=" + txtIdProd.getText();
+        ObjDetalleAplicacion miDetalle = new ObjDetalleAplicacion(name);
+        
+        if (indiceEditando >=0 &&  indiceEditando < lineasTemp.size()) {
+            
+            lineasTemp.set(indiceEditando, miDetalle);
+            indiceEditando = -1;
+            
+            tblLineAgro.clearSelection();
+            
+        }else{
+            lineasTemp.add(miDetalle);
         }
+        refrescarLineas();
+        limpiarDetalle();
+    }//GEN-LAST:event_btnAddLineaActionPerformed
 
-        int indice = misMetodos.buscarEmpleado(Integer.parseInt(txtId.getText()));
-
-        if (indice == -1){
-            JOptionPane.showMessageDialog(null, "No existe un empleado con esa identificación", "Aviso Importante", JOptionPane.WARNING_MESSAGE);
-            return;
+    private void btnQuitarLineaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarLineaActionPerformed
+        // TODO add your handling code here:
+        
+        int fila = tblLineAgro.getSelectedRow();
+        
+        if (fila != -1) {
+            
+            lineasTemp.remove(fila);
+            refrescarLineas();
+            limpiarDetalle();
+        }else{
+            
+            aviso("Seleccione la linea que desea quitar");
         }
+    }//GEN-LAST:event_btnQuitarLineaActionPerformed
 
-        int respuesta = JOptionPane.showConfirmDialog(null, "¿Desea borrar a este empleado?", "Confirmar", JOptionPane.YES_NO_OPTION);
-        if (respuesta == JOptionPane.YES_OPTION){
-            almacen.quitarEmpleado(indice);
-            tblEmpleados.setModel(almacen.mostrarEmpleados());
-            limpiarCampos();
+    private void btnConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarActionPerformed
+        // TODO add your handling code here:
+        
+        int fila = tblAplicaciones.getSelectedRow();
+        if (fila !=-1) {
+            
+            ArrayList<ObjAplicacion> lista = almacen.listarAplicacion();
+            ObjAplicacion miAplicacion = lista.get(fila);
+            
+            txtId.setText(miAplicacion.getIdFormat());
+            txtNombreApp.setText(miAplicacion.getNombre());
+            txtJustificacion.setText(miAplicacion.getJustificacion());
+            
+            //limpio por si hay residuos
+            lineasTemp.clear();
+            lineasTemp.addAll(miAplicacion.getDetalle());
+            refrescarLineas();
+            
+            
+            modificar = true;
+            tabs.setSelectedIndex(1);
+        }else{
+            aviso("Seleccione una fila para poder modificar");
+        }
+    }//GEN-LAST:event_btnConsultarActionPerformed
 
-            movimiento = "Elimino";
-            int idBitacora = metodosBita.siguienteBitacora();
-            ObjBitacora miBitacora = new ObjBitacora(idBitacora, nombreUser, seccion, movimiento);
-            almacenBitacora.agregarBitacora(miBitacora);
-        }*/
-    }//GEN-LAST:event_btnBorrarActionPerformed
+    private void btnBorrar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrar2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnBorrar2ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddLinea;
-    private javax.swing.JButton btnBorrar;
+    private javax.swing.JButton btnBorrar2;
+    private javax.swing.JButton btnConsultar;
     private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnQuitarLinea;
     private javax.swing.JComboBox<String> cmbEstado;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lblDecripcionApli;
     private javax.swing.JLabel lblDecripcionDetalle;
     private javax.swing.JLabel lblDescripcion;
@@ -494,8 +725,15 @@ public class PnlAplicaciones extends javax.swing.JPanel {
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JLabel lblTituloAgregar;
     private javax.swing.JLabel lblTituloConsultar;
+    private javax.swing.JLabel lblTotal;
+    private javax.swing.JPanel pnlAgregar;
+    private javax.swing.JPanel pnlConsulta;
     private javax.swing.JPanel pnlSubrayado;
     private javax.swing.JPanel pnlSubrayado1;
+    private javax.swing.JScrollPane scrAplicacion;
+    private javax.swing.JScrollPane scrDetallers;
+    private javax.swing.JScrollPane scrLineas;
+    private javax.swing.JTabbedPane tabs;
     private javax.swing.JTable tblAplicaciones;
     private javax.swing.JTable tblDetalles;
     private javax.swing.JTable tblLineAgro;
@@ -507,4 +745,6 @@ public class PnlAplicaciones extends javax.swing.JPanel {
     private javax.swing.JTextField txtNameProd;
     private javax.swing.JTextField txtNombreApp;
     // End of variables declaration//GEN-END:variables
+
+    
 }

@@ -331,7 +331,7 @@ public class ArchivosE {
                 jsonContructor.append("    \"id\": ").append(aplicacion.getId()).append(",\n");
                 jsonContructor.append("    \"Nombre\": \"").append(aplicacion.getNombre()).append("\",\n");
                 jsonContructor.append("    \"Justificacion\": \"").append(aplicacion.getJustificacion()).append("\",\n");
-                jsonContructor.append("    \"Estado\": \"").append(aplicacion.getEstado()).append("\",\n");
+                jsonContructor.append("    \"Estado\": ").append(aplicacion.getEstado()).append(",\n");
                 jsonContructor.append("    \"Detalle\": [\n");
                 
              
@@ -391,7 +391,7 @@ public class ArchivosE {
             StringBuilder contenido = new StringBuilder();
             String linea = lector.readLine();
 
-            // Leemos todo el archivo JSON y quitamos espacios extras de cada línea
+            // 1. Leemos todo el archivo JSON y quitamos espacios extras de cada línea
             while (linea != null) {
                 contenido.append(linea.trim());
                 linea = lector.readLine();
@@ -400,39 +400,46 @@ public class ArchivosE {
 
             String textoJson = contenido.toString().trim();
 
-            // Si está vacío
+            // Si está vacío o solo tiene "[]", salimos
             if (textoJson.equals("[]") || textoJson.isEmpty()) {
                 return;
             }
 
-            
+            // Limpiamos la lista antes de cargar para no duplicar registros
+            EstructuraAplicacion.listaAplicaciones.clear();
 
-            //  Quitamos el corchete inicial y el corchete final
-            textoJson = textoJson.substring(1, textoJson.length() - 1).trim();
+            // 2. Separamos cada aplicación donde empieza su clave "id":
+            // La posición 0 es lo que está antes del primer "id": (el '[' inicial), se ignora
+            String[] objetosApp = textoJson.split("\"id\"\\s*:");
 
-            // 3. Separamos cada objeto de aplicación usando la marca de cierre del arreglo Detalle
-            // y la apertura del siguiente objeto
-            String[] objetosApp = textoJson.split("\\]\\s*,\\s*\\{");
+            for (int i = 1; i < objetosApp.length; i++) {
+                // Reconstruimos el bloque de esta aplicación desde "id":
+                String bloqueApp = "\"id\":" + objetosApp[i].trim();
 
-            for (int i = 0; i < objetosApp.length; i++) {
-                String objStr = objetosApp[i].trim();
-
-                // que no tenga los corchetes
-                objStr = objStr.replace("[", "").replace("]", "");
-
-                //Separamos la parte de Detalle del resto de campos de la aplicación
-                String[] partesDetalle = objStr.split("\"Detalle\"\\s*:");
-                String cabeceraApp = partesDetalle[0];
-
-                // Limpiamos llaves y comillas de los campos principales de ObjAplicacion
-                String limpioCabecera = cabeceraApp
+                // Quitamos corchetes y llaves para limpiar la estructura
+                bloqueApp = bloqueApp
+                        .replace("[", "")
+                        .replace("]", "")
                         .replace("{", "")
                         .replace("}", "")
-                        .replace("\"", "")
                         .trim();
 
-                String[] camposApp = limpioCabecera.split(",");
+                // Si al final del bloque quedó una coma suelta, la quitamos
+                if (bloqueApp.endsWith(",")) {
+                    bloqueApp = bloqueApp.substring(0, bloqueApp.length() - 1).trim();
+                }
+
+                // 3. Separamos la cabecera de la aplicación y su arreglo "Detalle"
+                String[] partesDetalle = bloqueApp.split("\"Detalle\"\\s*:");
+                String cabeceraLimpia = partesDetalle[0].replace("\"", "").trim();
+
+                // Si la cabecera termina en coma (porque antes venía "Detalle":), la quitamos
+                if (cabeceraLimpia.endsWith(",")) {
+                    cabeceraLimpia = cabeceraLimpia.substring(0, cabeceraLimpia.length() - 1).trim();
+                }
+
                 ObjAplicacion aplicacion = new ObjAplicacion();
+                String[] camposApp = cabeceraLimpia.split(",");
 
                 for (int j = 0; j < camposApp.length; j++) {
                     String[] par = camposApp[j].split(":");
@@ -457,19 +464,16 @@ public class ArchivosE {
                     }
                 }
 
-                // Si existe la secciónDetalle, recorremos cada producto y lo agregamos
+                // 4. Cargamos todos los productos de "Detalle" para esta aplicación
                 if (partesDetalle.length >= 2) {
-                    String detalleTexto = partesDetalle[1].trim();
+                    String detalleLimpio = partesDetalle[1].replace("\"", "").trim();
 
-                    // Quitamos llaves y comillas para trabajar cada par clave:valor
-                    String limpioDetalle = detalleTexto
-                            .replace("{", "")
-                            .replace("}", "")
-                            .replace("\"", "")
-                            .trim();
+                    if (detalleLimpio.endsWith(",")) {
+                        detalleLimpio = detalleLimpio.substring(0, detalleLimpio.length() - 1).trim();
+                    }
 
-                    if (!limpioDetalle.isEmpty()) {
-                        String[] elementosDetalle = limpioDetalle.split(",");
+                    if (!detalleLimpio.isEmpty()) {
+                        String[] elementosDetalle = detalleLimpio.split(",");
 
                         for (int d = 0; d < elementosDetalle.length; d++) {
                             String[] parProducto = elementosDetalle[d].split(":");
@@ -485,7 +489,7 @@ public class ArchivosE {
                     }
                 }
 
-                // Guardamos la aplicación completa (con su lista de detalles) en EstructuraAplicacion
+                // 5. Guardamos la aplicación completa en la estructura
                 almacenApli.agregarAplicacion(aplicacion);
             }
 
