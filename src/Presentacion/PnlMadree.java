@@ -61,21 +61,84 @@ public class PnlMadree extends JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblDatos = new javax.swing.JTable();
+        lblTitulo = new javax.swing.JLabel();
+        pnlSubrayado = new javax.swing.JPanel();
+        lblDescripcion = new javax.swing.JLabel();
+        pnlTarjeta = new javax.swing.JPanel();
         btnGuardar = new javax.swing.JButton();
         btnBorrar = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblEmpleados = new javax.swing.JTable();
-        jPanel1 = new javax.swing.JPanel();
-        lblTitulo = new javax.swing.JLabel();
+        lblId = new javax.swing.JLabel();
+        txtId = new javax.swing.JTextField();
+        btnBuscar = new javax.swing.JButton();
+        lblCampo1 = new javax.swing.JLabel();
+        txtCampo1 = new javax.swing.JTextField();
+        lblCampo2 = new javax.swing.JLabel();
+        txtCampo2 = new javax.swing.JTextField();
+        lblCampo3 = new javax.swing.JLabel();
+        txtCampo3 = new javax.swing.JTextField();
+        lblEstado = new javax.swing.JLabel();
+        cmbEstado = new javax.swing.JComboBox<>();
+        btnListar = new javax.swing.JButton();
 
-        setBackground(new java.awt.Color(204, 255, 229));
-        setMaximumSize(new java.awt.Dimension(650, 540));
-        setMinimumSize(new java.awt.Dimension(650, 540));
+        setBackground(new java.awt.Color(247, 242, 228));
+        setMaximumSize(new java.awt.Dimension(650, 630));
+        setMinimumSize(new java.awt.Dimension(650, 630));
         setPreferredSize(new java.awt.Dimension(650, 540));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        btnGuardar.setBackground(new java.awt.Color(204, 255, 204));
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(205, 195, 170)));
+        jScrollPane1.setViewportBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(205, 195, 170)));
+
+        tblDatos.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        tblDatos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Id", "Campo 1", "Campo 2", "Estado"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblDatos.setFillsViewportHeight(true);
+        tblDatos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblDatosMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblDatos);
+
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(25, 320, 600, 285));
+
+        lblTitulo.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        lblTitulo.setForeground(new java.awt.Color(70, 52, 35));
+        lblTitulo.setText("Título del Módulo");
+        add(lblTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(25, 15, 300, 30));
+
+        pnlSubrayado.setBackground(new java.awt.Color(232, 178, 58));
+        add(pnlSubrayado, new org.netbeans.lib.awtextra.AbsoluteConstraints(25, 50, 60, 4));
+
+        lblDescripcion.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        lblDescripcion.setForeground(new java.awt.Color(140, 120, 95));
+        lblDescripcion.setText("Descripción corta del módulo");
+        add(lblDescripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(95, 42, -1, -1));
+
+        pnlTarjeta.setBackground(new java.awt.Color(255, 255, 255));
+        pnlTarjeta.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(205, 195, 170)));
+        pnlTarjeta.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        btnGuardar.setBackground(new java.awt.Color(86, 140, 72));
         btnGuardar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnGuardar.setForeground(new java.awt.Color(255, 255, 255));
+        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/guardar.png"))); // NOI18N
         btnGuardar.setText("  Guardar");
         btnGuardar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
@@ -83,47 +146,81 @@ public class PnlMadree extends JPanel {
                 btnGuardarActionPerformed(evt);
             }
         });
-        add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(95, 270, 140, 37));
+        pnlTarjeta.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, 140, 40));
 
-        btnBorrar.setBackground(new java.awt.Color(255, 153, 153));
+        btnBorrar.setBackground(new java.awt.Color(184, 84, 60));
         btnBorrar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnBorrar.setForeground(new java.awt.Color(255, 255, 255));
+        btnBorrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/boton-eliminar.png"))); // NOI18N
         btnBorrar.setText("  Borrar");
         btnBorrar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        btnBorrar.setBorderPainted(false);
         btnBorrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBorrarActionPerformed(evt);
             }
         });
-        add(btnBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 270, 140, 37));
+        pnlTarjeta.add(btnBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 150, 140, 40));
 
-        tblEmpleados.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+        lblId.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblId.setForeground(new java.awt.Color(70, 52, 35));
+        lblId.setText("Id");
+        pnlTarjeta.add(lblId, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 40, -1));
 
-            },
-            new String [] {
-                "Title 1"
-            }
-        ));
-        tblEmpleados.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblEmpleadosMouseClicked(evt);
-            }
-        });
-        jScrollPane1.setViewportView(tblEmpleados);
+        txtId.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(205, 195, 170)));
+        pnlTarjeta.add(txtId, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 150, 28));
 
-        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 400, 610, 193));
+        btnBuscar.setBackground(new java.awt.Color(247, 242, 228));
+        btnBuscar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnBuscar.setForeground(new java.awt.Color(70, 52, 35));
+        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/lupa.png"))); // NOI18N
+        btnBuscar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(205, 195, 170)));
+        pnlTarjeta.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 30, 40, 30));
 
-        jPanel1.setBackground(new java.awt.Color(153, 255, 204));
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 102, 102)));
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        lblCampo1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblCampo1.setForeground(new java.awt.Color(70, 52, 35));
+        lblCampo1.setText("Campo 1");
+        pnlTarjeta.add(lblCampo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 10, -1, -1));
 
-        lblTitulo.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        lblTitulo.setForeground(new java.awt.Color(0, 102, 51));
-        lblTitulo.setText("Empleados");
-        jPanel1.add(lblTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 20, -1, -1));
+        txtCampo1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(205, 195, 170)));
+        pnlTarjeta.add(txtCampo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 30, 160, 28));
 
-        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 650, 60));
+        lblCampo2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblCampo2.setForeground(new java.awt.Color(70, 52, 35));
+        lblCampo2.setText("Campo 2");
+        pnlTarjeta.add(lblCampo2, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 10, -1, -1));
+
+        txtCampo2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(205, 195, 170)));
+        pnlTarjeta.add(txtCampo2, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 30, 160, 28));
+
+        lblCampo3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblCampo3.setForeground(new java.awt.Color(70, 52, 35));
+        lblCampo3.setText("Campo 3");
+        pnlTarjeta.add(lblCampo3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, -1, -1));
+
+        txtCampo3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(205, 195, 170)));
+        pnlTarjeta.add(txtCampo3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 380, 28));
+
+        lblEstado.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblEstado.setForeground(new java.awt.Color(70, 52, 35));
+        lblEstado.setText("Estado");
+        pnlTarjeta.add(lblEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 80, 50, -1));
+
+        cmbEstado.setBackground(new java.awt.Color(255, 255, 255));
+        cmbEstado.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        cmbEstado.setForeground(new java.awt.Color(70, 52, 35));
+        cmbEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Activo", "Inactivo" }));
+        cmbEstado.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(205, 195, 170)));
+        pnlTarjeta.add(cmbEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 100, 160, 28));
+
+        btnListar.setBackground(new java.awt.Color(232, 178, 58));
+        btnListar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnListar.setForeground(new java.awt.Color(70, 52, 35));
+        btnListar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/lista.png"))); // NOI18N
+        btnListar.setText("Listar");
+        btnListar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        pnlTarjeta.add(btnListar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 150, 130, 40));
+
+        add(pnlTarjeta, new org.netbeans.lib.awtextra.AbsoluteConstraints(25, 75, 600, 225));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
@@ -209,22 +306,36 @@ public class PnlMadree extends JPanel {
         }*/
     }//GEN-LAST:event_btnBorrarActionPerformed
 
-    private void tblEmpleadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblEmpleadosMouseClicked
+    private void tblDatosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDatosMouseClicked
         // TODO add your handling code here:
         // La fila de la tabla coincide con la posición del empleado en la lista
       /*  int fila = tblEmpleados.getSelectedRow();
         if (fila != -1){
             cargarEmpleado(almacen.listarEmpleados().get(fila));
         }*/
-    }//GEN-LAST:event_tblEmpleadosMouseClicked
+    }//GEN-LAST:event_tblDatosMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBorrar;
+    private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnGuardar;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JButton btnListar;
+    private javax.swing.JComboBox<String> cmbEstado;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblCampo1;
+    private javax.swing.JLabel lblCampo2;
+    private javax.swing.JLabel lblCampo3;
+    private javax.swing.JLabel lblDescripcion;
+    private javax.swing.JLabel lblEstado;
+    private javax.swing.JLabel lblId;
     private javax.swing.JLabel lblTitulo;
-    private javax.swing.JTable tblEmpleados;
+    private javax.swing.JPanel pnlSubrayado;
+    private javax.swing.JPanel pnlTarjeta;
+    private javax.swing.JTable tblDatos;
+    private javax.swing.JTextField txtCampo1;
+    private javax.swing.JTextField txtCampo2;
+    private javax.swing.JTextField txtCampo3;
+    private javax.swing.JTextField txtId;
     // End of variables declaration//GEN-END:variables
 }

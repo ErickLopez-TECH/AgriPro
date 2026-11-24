@@ -357,6 +357,9 @@ public class FrmHome extends javax.swing.JFrame {
         lblUsuario.setText("Bienvenido Usuario:");
 
         btnCerrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/apagar.png"))); // NOI18N
+        btnCerrar.setBorder(null);
+        btnCerrar.setContentAreaFilled(false);
+        btnCerrar.setFocusPainted(false);
         btnCerrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCerrarActionPerformed(evt);
@@ -370,21 +373,20 @@ public class FrmHome extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addComponent(lblUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 155, Short.MAX_VALUE)
-                .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(19, 19, 19))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 134, Short.MAX_VALUE)
+                .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnCerrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addComponent(lblUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(16, 16, 16)
+                .addComponent(lblUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(12, Short.MAX_VALUE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnCerrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 0, 650, 60));
@@ -433,48 +435,15 @@ public class FrmHome extends javax.swing.JFrame {
     private void btnLotesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLotesActionPerformed
         // TODO add your handling code here:
         pnlSubReportes.setVisible(false);
-       // mostrarPanel(new PnlLiquidacion(usuarioActual));
+        mostrarPanel(new PnlAplicaciones());
 
     }//GEN-LAST:event_btnLotesActionPerformed
 
     private void btnAplicacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAplicacionesActionPerformed
         // TODO add your handling code here:
         pnlSubReportes.setVisible(false);
-        
-       /* if(!btnPress){
-            ObjViatico miViatico1= new  ObjViatico();
-            MetodosViatico viaticosMetodos = new MetodosViatico();
-            EstructuraViaticos almacen = new EstructuraViaticos();
-
-            miViatico1.setId(viaticosMetodos.siguienteViatico());
-            miViatico1.setNombre("Desayuno");
-            miViatico1.setMonto(3000);
-            miViatico1.setEstado(0);
-
-            almacen.agregarViatico(miViatico1);
-            
-            ObjViatico miViatico2= new  ObjViatico();
-           
-            miViatico2.setId(viaticosMetodos.siguienteViatico());
-            miViatico2.setNombre("Almuerzo");
-            miViatico2.setMonto(5000);
-            miViatico2.setEstado(0);
-
-            almacen.agregarViatico(miViatico2);
-            
-            ObjViatico miViatico3= new  ObjViatico();
-           
-            miViatico3.setId(viaticosMetodos.siguienteViatico());
-            miViatico3.setNombre("Cena");
-            miViatico3.setMonto(5000);
-            miViatico3.setEstado(0);
-
-            almacen.agregarViatico(miViatico3);
-            
-            btnPress = true;
-        }else{
-            JOptionPane.showMessageDialog(this, "Ya has cargado los registros","Proteccion contra duplicados",JOptionPane.INFORMATION_MESSAGE);
-        }*/
+        mostrarPanel(new PnlAplicaciones());
+       
     }//GEN-LAST:event_btnAplicacionesActionPerformed
 
     private void btnUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuariosActionPerformed
@@ -492,7 +461,7 @@ public class FrmHome extends javax.swing.JFrame {
     private void btnRepCalendarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRepCalendarioActionPerformed
         // TODO add your handling code here:
         pnlSubReportes.setVisible(false);
-       // mostrarPanel(new PnlRepCFech());
+       //mostrarPanel(new PnlCalendarioAplicaciones());
 
     }//GEN-LAST:event_btnRepCalendarioActionPerformed
 
