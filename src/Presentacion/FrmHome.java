@@ -411,18 +411,16 @@ public class FrmHome extends javax.swing.JFrame {
 
     private void btnAgroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgroActionPerformed
         // TODO add your handling code here:
-       pnlSubReportes.setVisible(false);
-    //try {
-        mostrarPanel(new PnlMadree());
-    /*} catch (Throwable t) {
-        // Esto abrirá una ventana emergente con el error exacto y su causa
-        javax.swing.JOptionPane.showMessageDialog(this, 
-            "Error al abrir el panel:\n" + t.toString() + "\n\nCausa:\n" + t.getCause(), 
-            "Diagnóstico de Error", 
-            javax.swing.JOptionPane.ERROR_MESSAGE);
-            
-        
-    }*/
+        pnlSubReportes.setVisible(false);
+        //try {
+            mostrarPanel(new PnlAgroquimicos());
+        /*} catch (Throwable t) {
+            // Esto abrirá una ventana emergente con el error exacto y su causa
+            javax.swing.JOptionPane.showMessageDialog(this, 
+                "Error al abrir el panel:\n" + t.toString() + "\n\nCausa:\n" + t.getCause(), 
+                "Diagnóstico de Error", 
+                javax.swing.JOptionPane.ERROR_MESSAGE);
+        }*/
     }//GEN-LAST:event_btnAgroActionPerformed
 
     private void btnCultivosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCultivosActionPerformed
