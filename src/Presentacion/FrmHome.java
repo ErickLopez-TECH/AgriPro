@@ -7,7 +7,6 @@ package Presentacion;
 import javax.swing.JPanel;
 import org.netbeans.lib.awtextra.AbsoluteConstraints;
 
-
 /**
  *
  * @author jdavi
@@ -16,17 +15,17 @@ public class FrmHome extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmHome.class.getName());
     static boolean btnPress = false;
+
     /**
      * Creates new form FrmHome
      */
-   // private ObjUsuario usuarioActual;
+    // private ObjUsuario usuarioActual;
 
     public FrmHome(/*ObjUsuario usuario*/) {
         initComponents();
-       // this.usuarioActual = usuario;
+        // this.usuarioActual = usuario;
         //lblUsuario.setText("Usuario: " + usuario.getNomUsuario());
-        
-        
+
     }
 
     /**
@@ -400,7 +399,7 @@ public class FrmHome extends javax.swing.JFrame {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
-     /*   pnlSubReportes.setVisible(false);
+        /*   pnlSubReportes.setVisible(false);
 
         // Restricción por rol: solo el administrador (0) usa estas opciones
         if (usuarioActual.getRol() != 0){
@@ -411,10 +410,10 @@ public class FrmHome extends javax.swing.JFrame {
 
     private void btnAgroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgroActionPerformed
         // TODO add your handling code here:
-       pnlSubReportes.setVisible(false);
-    //try {
+        pnlSubReportes.setVisible(false);
+        //try {
         mostrarPanel(new PnlMadree());
-    /*} catch (Throwable t) {
+        /*} catch (Throwable t) {
         // Esto abrirá una ventana emergente con el error exacto y su causa
         javax.swing.JOptionPane.showMessageDialog(this, 
             "Error al abrir el panel:\n" + t.toString() + "\n\nCausa:\n" + t.getCause(), 
@@ -426,9 +425,10 @@ public class FrmHome extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAgroActionPerformed
 
     private void btnCultivosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCultivosActionPerformed
-        // TODO add your handling code here:
-      //  pnlSubReportes.setVisible(false);
-      //  mostrarPanel(new PnlViaticos(usuarioActual));
+
+        //--Abrir la ventana de Cultivos
+        pnlSubReportes.setVisible(false);
+        mostrarPanel(new PnlCultivos());
 
     }//GEN-LAST:event_btnCultivosActionPerformed
 
@@ -443,7 +443,7 @@ public class FrmHome extends javax.swing.JFrame {
         // TODO add your handling code here:
         pnlSubReportes.setVisible(false);
         mostrarPanel(new PnlAplicaciones());
-       
+
     }//GEN-LAST:event_btnAplicacionesActionPerformed
 
     private void btnUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuariosActionPerformed
@@ -461,7 +461,7 @@ public class FrmHome extends javax.swing.JFrame {
     private void btnRepCalendarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRepCalendarioActionPerformed
         // TODO add your handling code here:
         pnlSubReportes.setVisible(false);
-       //mostrarPanel(new PnlCalendarioAplicaciones());
+        //mostrarPanel(new PnlCalendarioAplicaciones());
 
     }//GEN-LAST:event_btnRepCalendarioActionPerformed
 
@@ -493,8 +493,7 @@ public class FrmHome extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnPaqueteApl1ActionPerformed
 
-    
-    private void mostrarPanel(JPanel panel){
+    private void mostrarPanel(JPanel panel) {
         pnlContenido.removeAll();
         pnlContenido.add(panel, new AbsoluteConstraints(0, 0, 650, 630));
         pnlContenido.revalidate();
