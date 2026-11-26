@@ -14,38 +14,52 @@ import java.util.ArrayList;
  */
 public class MetodosCultivo {
 
-    EstructuraCultivo almacen = new EstructuraCultivo();
-    
+    private EstructuraCultivo almacen = new EstructuraCultivo();
+
     //--Id correspondiente
     public int siguienteCultivo() {
-    int resultado = 0;
-    ArrayList<ObjCultivo> misCultivos = almacen.listarCultivo();
-    for (int i = 0; i < misCultivos.size(); i++) {
-        resultado = misCultivos.get(i).getId();
+        int resultado = 0;
+        ArrayList<ObjCultivo> misCultivos = almacen.listarCultivo();
+        for (int i = 0; i < misCultivos.size(); i++) {
+            resultado = misCultivos.get(i).getId();
+        }
+        return resultado + 1;
     }
-    return resultado + 1;
-}
+
     //--Donde está el cultivo
     public int buscarCultivo(int buscar) {
-    int resultado = -1;
-    ArrayList<ObjCultivo> misCultivos = almacen.listarCultivo();
-    for (int i = 0; i < misCultivos.size(); i++) {
-        if (misCultivos.get(i).getId() == buscar) {
-            resultado = i;
+        int resultado = -1;
+        ArrayList<ObjCultivo> misCultivos = almacen.listarCultivo();
+        for (int i = 0; i < misCultivos.size(); i++) {
+            if (misCultivos.get(i).getId() == buscar) {
+                resultado = i;
+            }
         }
+        return resultado;
     }
-    return resultado;
-}
+
     //--Devuelve el Obj completo
     public ObjCultivo buscarObjCultivo(int buscar) {
-    ObjCultivo resultado = null;
-    ArrayList<ObjCultivo> misCultivos = almacen.listarCultivo();
-    for (int i = 0; i < misCultivos.size(); i++) {
-        if (misCultivos.get(i).getId() == buscar) {
-            resultado = misCultivos.get(i);
+        ObjCultivo resultado = null;
+        ArrayList<ObjCultivo> misCultivos = almacen.listarCultivo();
+        for (int i = 0; i < misCultivos.size(); i++) {
+            if (misCultivos.get(i).getId() == buscar) {
+                resultado = misCultivos.get(i);
+            }
         }
+        return resultado;
     }
-    return resultado;
-}
 
+    //--Devuelve solo cultivos Activos estado 1
+    //-- otras ventanas (ej. Lotes) no se pueda elegir un cultivo Inactivo
+    public ArrayList<ObjCultivo> listarCultivosActivos() {
+        ArrayList<ObjCultivo> activos = new ArrayList<>();
+        ArrayList<ObjCultivo> misCultivos = almacen.listarCultivo();
+        for (int i = 0; i < misCultivos.size(); i++) {
+            if (misCultivos.get(i).getEstado() == 1) {
+                activos.add(misCultivos.get(i));
+            }
+        }
+        return activos;
+    }
 }

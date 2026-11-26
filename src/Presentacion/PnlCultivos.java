@@ -23,9 +23,9 @@ public class PnlCultivos extends javax.swing.JPanel {
         cmbEstado.setSelectedIndex(1);
     }
 
-    EstructuraCultivo almacen = new EstructuraCultivo();
-    ArchivosE arch = new ArchivosE();
-    MetodosCultivo misMetodos = new MetodosCultivo();
+    private EstructuraCultivo almacen = new EstructuraCultivo();
+    private ArchivosE arch = new ArchivosE();
+    private MetodosCultivo misMetodos = new MetodosCultivo();
 
     /**
      * This method is called from within the constructor to initialize the form.
