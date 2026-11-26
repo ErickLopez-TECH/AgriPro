@@ -29,6 +29,7 @@ public class ArchivosE {
     EstructuraUser almacen = new EstructuraUser();
     EstructuraCultivo almacenCulti = new EstructuraCultivo();
     EstructuraAgroquimico almacenAgro = new EstructuraAgroquimico();
+
     EstructuraAplicacion almacenApli = new EstructuraAplicacion();
     
     //mensaje de error

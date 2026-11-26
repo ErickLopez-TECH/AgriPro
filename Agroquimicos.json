@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "NombreComercial": "Gramoxone",
+    "Reactivo": "Paraquaaat",
+    "Presentacion": "ml",
+    "DosisHectarea": 2.5,
+    "Tipo": "Herbicidas",
+    "Estado": 1
+  },
+  {
+    "id": 2,
+    "NombreComercial": "fungiungui",
+    "Reactivo": "coco",
+    "Presentacion": "gramos",
+    "DosisHectarea": 3.0,
+    "Tipo": "Fungicidas",
+    "Estado": 0
+  },
+  {
+    "id": 3,
+    "NombreComercial": "adsa",
+    "Reactivo": "dscsd",
+    "Presentacion": "g",
+    "DosisHectarea": 21.0,
+    "Tipo": "Herbicidas",
+    "Estado": 1
+  }
+]

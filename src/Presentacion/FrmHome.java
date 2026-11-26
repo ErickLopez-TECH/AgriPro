@@ -412,6 +412,14 @@ public class FrmHome extends javax.swing.JFrame {
         // TODO add your handling code here:
         pnlSubReportes.setVisible(false);
         //try {
+            mostrarPanel(new PnlAgroquimicos());
+        /*} catch (Throwable t) {
+            // Esto abrirá una ventana emergente con el error exacto y su causa
+            javax.swing.JOptionPane.showMessageDialog(this, 
+                "Error al abrir el panel:\n" + t.toString() + "\n\nCausa:\n" + t.getCause(), 
+                "Diagnóstico de Error", 
+                javax.swing.JOptionPane.ERROR_MESSAGE);
+        }*/
         mostrarPanel(new PnlMadree());
         /*} catch (Throwable t) {
         // Esto abrirá una ventana emergente con el error exacto y su causa
@@ -422,6 +430,7 @@ public class FrmHome extends javax.swing.JFrame {
             
         
     }*/
+
     }//GEN-LAST:event_btnAgroActionPerformed
 
     private void btnCultivosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCultivosActionPerformed
