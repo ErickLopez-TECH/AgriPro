@@ -420,16 +420,7 @@ public class FrmHome extends javax.swing.JFrame {
                 "Diagnóstico de Error", 
                 javax.swing.JOptionPane.ERROR_MESSAGE);
         }*/
-        mostrarPanel(new PnlMadree());
-        /*} catch (Throwable t) {
-        // Esto abrirá una ventana emergente con el error exacto y su causa
-        javax.swing.JOptionPane.showMessageDialog(this, 
-            "Error al abrir el panel:\n" + t.toString() + "\n\nCausa:\n" + t.getCause(), 
-            "Diagnóstico de Error", 
-            javax.swing.JOptionPane.ERROR_MESSAGE);
-            
-        
-    }*/
+       
 
     }//GEN-LAST:event_btnAgroActionPerformed
 
@@ -470,7 +461,7 @@ public class FrmHome extends javax.swing.JFrame {
     private void btnRepCalendarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRepCalendarioActionPerformed
         // TODO add your handling code here:
         pnlSubReportes.setVisible(false);
-        //mostrarPanel(new PnlCalendarioAplicaciones());
+        mostrarPanel(new PnlCalendarioAplicaciones());
 
     }//GEN-LAST:event_btnRepCalendarioActionPerformed
 

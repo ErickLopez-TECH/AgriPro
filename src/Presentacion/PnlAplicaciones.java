@@ -6,8 +6,10 @@ package Presentacion;
 
 import Datos.ArchivosE;
 import Datos.EstructuraAplicacion;
+import Datos.ObjAgroquimico;
 import Datos.ObjAplicacion;
 import Datos.ObjDetalleAplicacion;
+import Logica.MetodosAgroquimico;
 import Logica.MetodosAplicaciones;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -25,6 +27,7 @@ public class PnlAplicaciones extends javax.swing.JPanel {
      */
     private final ArrayList<ObjDetalleAplicacion> lineasTemp = new ArrayList<>(); 
     MetodosAplicaciones metodosApli = new MetodosAplicaciones();
+    MetodosAgroquimico metodosAgro = new MetodosAgroquimico();
     EstructuraAplicacion almacen = new EstructuraAplicacion();
     private boolean modificar = false;
     private int indiceEditando = -1;
@@ -171,11 +174,11 @@ public class PnlAplicaciones extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Id", "Agroquimico"
+                "Id", "Agroquimico", "Tipo", "Dosis x Hect"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, true
+                false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -261,6 +264,11 @@ public class PnlAplicaciones extends javax.swing.JPanel {
         lblIdProdu.setText("Id Agroquimico:");
 
         txtIdProd.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(205, 195, 170)));
+        txtIdProd.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtIdProdFocusLost(evt);
+            }
+        });
 
         lblNameProd.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblNameProd.setForeground(new java.awt.Color(70, 52, 35));
@@ -268,6 +276,7 @@ public class PnlAplicaciones extends javax.swing.JPanel {
 
         txtEspacioInvisible.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(205, 195, 170)));
 
+        txtNameProd.setEditable(false);
         txtNameProd.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(205, 195, 170)));
 
         btnAddLinea.setBackground(new java.awt.Color(232, 178, 58));
@@ -285,11 +294,11 @@ public class PnlAplicaciones extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Id", "AgroQuimico"
+                "Id", "AgroQuimico", "Tipo", "Dosis x Hect"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false
+                false, false, true, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -495,7 +504,9 @@ public class PnlAplicaciones extends javax.swing.JPanel {
             String[] partes = l.getProducto().split("=");
             
             
-            Object[] fila = { partes[1].trim(), partes[0].trim()
+            
+            Object[] fila = { partes[1].trim(), partes[0].trim(),
+                l.getTipoAgroquimico(),l.getDosisHectarea()
             
         };
             modelo.addRow(fila);
@@ -510,11 +521,11 @@ public class PnlAplicaciones extends javax.swing.JPanel {
         
         ArrayList<ObjAplicacion> lista = almacen.listarAplicacion();
         for (int i = 0; i < lista.size(); i++) {
-            ObjAplicacion liqui= lista.get(i);
+            ObjAplicacion apli= lista.get(i);
             
             Object[] fila = {
-                liqui.getIdFormat(), liqui.getNombre(),
-                liqui.getJustificacion(),
+                apli.getIdFormat(), apli.getNombre(),
+                apli.getJustificacion(),
                         
             };
             
@@ -545,11 +556,15 @@ public class PnlAplicaciones extends javax.swing.JPanel {
             ObjDetalleAplicacion l = detalles.get(i);
             
             String[] partes = l.getProducto().split("=");
+            String tipoAgro = l.getTipoAgroquimico();
+            double dosisHectarea = l.getDosisHectarea();
+            
             
             modelo.addRow(new Object[]{
                 partes[1].trim(),
-                partes[0].trim()
-                
+                partes[0].trim(),
+                tipoAgro,
+                dosisHectarea
             });
         }
         
@@ -639,21 +654,37 @@ public class PnlAplicaciones extends javax.swing.JPanel {
 
     private void btnAddLineaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddLineaActionPerformed
         // TODO add your handling code here:
-        String name = txtNameProd.getText() + "=" + txtIdProd.getText();
-        ObjDetalleAplicacion miDetalle = new ObjDetalleAplicacion(name);
+        int id = validarId();
+        ObjAgroquimico miAgro = metodosAgro.buscarObjAgroquimico(id);
         
-        if (indiceEditando >=0 &&  indiceEditando < lineasTemp.size()) {
+        if (miAgro != null) {
             
-            lineasTemp.set(indiceEditando, miDetalle);
-            indiceEditando = -1;
+            String producto = txtNameProd.getText() + "=" + txtIdProd.getText();
+            String tipoAgro = miAgro.getTipo();
+            double dosisHect = miAgro.getDosisHectarea();
             
-            tblLineAgro.clearSelection();
-            
+            if (miAgro.getEstado() == 1) {//1 = activo
+                ObjDetalleAplicacion miDetalle = new ObjDetalleAplicacion(tipoAgro, producto, dosisHect);
+        
+                if (indiceEditando >=0 &&  indiceEditando < lineasTemp.size()) {
+
+                    lineasTemp.set(indiceEditando, miDetalle);
+                    indiceEditando = -1;
+
+                    tblLineAgro.clearSelection();
+
+                }else{
+                    lineasTemp.add(miDetalle);
+                }
+                refrescarLineas();
+                limpiarDetalle();
+            }else{
+                aviso("No puedes agregar el agroquimico "+miAgro.getNombreComercial() +" inactivo");
+            }
         }else{
-            lineasTemp.add(miDetalle);
+            aviso("No puedes agregar un id junto con su agroquimico que no esta registrado. ");
         }
-        refrescarLineas();
-        limpiarDetalle();
+        
     }//GEN-LAST:event_btnAddLineaActionPerformed
 
     private void btnQuitarLineaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarLineaActionPerformed
@@ -702,6 +733,36 @@ public class PnlAplicaciones extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnBorrar2ActionPerformed
 
+    private void txtIdProdFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIdProdFocusLost
+        // TODO add your handling code here:
+        int id = validarId();
+        ObjAgroquimico miAgro = metodosAgro.buscarObjAgroquimico(id);
+        
+        if (miAgro != null) {
+            if (miAgro.getEstado() == 1) {
+                txtNameProd.setText(miAgro.getNombreComercial());
+            }else{
+                aviso("El Agroquimico "+ miAgro.getNombreComercial() +" esta inactivo");
+            }
+            
+        }else{
+            aviso("Este id no esta registrado en el sistema.");
+            txtNameProd.setText("");
+        }
+        
+    }//GEN-LAST:event_txtIdProdFocusLost
+
+    private int validarId(){
+        
+        int id = 0;
+        try {
+            id = Integer.parseInt(txtIdProd.getText());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Solo se permiten valores numericos en el id","Valor incorrecto",JOptionPane.WARNING_MESSAGE);
+            return 0; 
+        }
+        return id;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddLinea;

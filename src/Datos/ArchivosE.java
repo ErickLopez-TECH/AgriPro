@@ -343,7 +343,9 @@ public class ArchivosE {
 
                 //Abrimos un objeto JSON para este detalle
                 jsonContructor.append("      {\n");
-                jsonContructor.append("        \"producto\": \"").append(linea.getProducto()).append("\"\n");
+                jsonContructor.append("        \"producto\": \"").append(linea.getProducto()).append("\",\n");
+                jsonContructor.append("        \"TipoAgroquimico\": \"").append(linea.getTipoAgroquimico()).append("\",\n");
+                jsonContructor.append("        \"dosisHectarea\": ").append(linea.getDosisHectarea()).append("\n");
 
                 //Si no es el último detalle, agregamos coma
                 if (d < aplicacion.getDetalle().size() - 1) {
@@ -392,7 +394,7 @@ public class ArchivosE {
             StringBuilder contenido = new StringBuilder();
             String linea = lector.readLine();
 
-            // 1. Leemos todo el archivo JSON y quitamos espacios extras de cada línea
+            // Leemos todo el archivo JSON y quitamos espacios extras de cada línea
             while (linea != null) {
                 contenido.append(linea.trim());
                 linea = lector.readLine();
@@ -409,8 +411,8 @@ public class ArchivosE {
             // Limpiamos la lista antes de cargar para no duplicar registros
             EstructuraAplicacion.listaAplicaciones.clear();
 
-            // 2. Separamos cada aplicación donde empieza su clave "id":
-            // La posición 0 es lo que está antes del primer "id": (el '[' inicial), se ignora
+            // Separamos cada aplicación donde empieza su clave "id":
+            // La posición 0 es lo que está antes del primer id: (el '[' inicial), se ignora
             String[] objetosApp = textoJson.split("\"id\"\\s*:");
 
             for (int i = 1; i < objetosApp.length; i++) {
@@ -430,7 +432,7 @@ public class ArchivosE {
                     bloqueApp = bloqueApp.substring(0, bloqueApp.length() - 1).trim();
                 }
 
-                // 3. Separamos la cabecera de la aplicación y su arreglo "Detalle"
+                //Separamos la cabecera de la aplicación y su arreglo "Detalle"
                 String[] partesDetalle = bloqueApp.split("\"Detalle\"\\s*:");
                 String cabeceraLimpia = partesDetalle[0].replace("\"", "").trim();
 
@@ -465,7 +467,7 @@ public class ArchivosE {
                     }
                 }
 
-                // 4. Cargamos todos los productos de "Detalle" para esta aplicación
+                //  Cargamos todos los detalles  para esta aplicación
                 if (partesDetalle.length >= 2) {
                     String detalleLimpio = partesDetalle[1].replace("\"", "").trim();
 
@@ -475,22 +477,45 @@ public class ArchivosE {
 
                     if (!detalleLimpio.isEmpty()) {
                         String[] elementosDetalle = detalleLimpio.split(",");
+                        ObjDetalleAplicacion detalleActual = null;
 
                         for (int d = 0; d < elementosDetalle.length; d++) {
-                            String[] parProducto = elementosDetalle[d].split(":");
-                            if (parProducto.length >= 2) {
-                                String claveProd = parProducto[0].trim();
-                                String valorProd = parProducto[1].trim();
+                            String[] parDetalle = elementosDetalle[d].split(":");
+                            if (parDetalle.length >= 2) {
+                                String claveDet = parDetalle[0].trim();
+                                String valorDet = parDetalle[1].trim();
 
-                                if (claveProd.equals("producto") && !valorProd.isEmpty()) {
-                                    aplicacion.agregarLinea(new ObjDetalleAplicacion(valorProd));
+                                switch (claveDet) {
+                                    case "producto":
+                                        // Si ya había un detalle armado, lo agregamos antes de iniciar otro
+                                        if (detalleActual != null) {
+                                            aplicacion.agregarLinea(detalleActual);
+                                        }
+                                        detalleActual = new ObjDetalleAplicacion();
+                                        detalleActual.setProducto(valorDet);
+                                        break;
+                                    case "TipoAgroquimico":
+                                        if (detalleActual != null) {
+                                            detalleActual.setTipoAgroquimico(valorDet);
+                                        }
+                                        break;
+                                    case "dosisHectarea":
+                                        if (detalleActual != null) {
+                                            detalleActual.setDosisHectarea(Double.parseDouble(valorDet));
+                                        }
+                                        break;
                                 }
                             }
+                        }
+
+                        // Agregamos la última línea de detalle procesada
+                        if (detalleActual != null) {
+                            aplicacion.agregarLinea(detalleActual);
                         }
                     }
                 }
 
-                // 5. Guardamos la aplicación completa en la estructura
+                // Guardamos la aplicación completa en la estructura
                 almacenApli.agregarAplicacion(aplicacion);
             }
 
