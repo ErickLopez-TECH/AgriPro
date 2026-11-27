@@ -269,13 +269,20 @@ La información se almacena en archivos `.json`. Al iniciar, el sistema carga ca
 Control Agrícola es el resultado del trabajo coordinado de tres especialistas; cada uno lidera un frente crítico del producto.
 
 <div align="center">
+  <img src="https://capsule-render.vercel.app/api?type=rect&color=gradient&customColorList=6,11,20&height=3" width="100%" />
+</div>
 
-| Desarrollador | Rol | Responsabilidades clave | GitHub |
-| :-- | :-- | :-- | :--: |
-| **Erick Jasiel López Borge** | Arquitecto de software y líder técnico | Diseño de la arquitectura en capas, modelo de dominio, reglas de negocio, motor de calendarización y cálculo de consumo de agroquímicos | [![GitHub](https://img.shields.io/badge/-Perfil-181717?style=flat-square&logo=github)](https://github.com/ErickLopez-TECH) |
-| **Dylan Álvarez** | Líder de interfaz y experiencia de usuario | Diseño e implementación de las ventanas, tablas y formularios; navegación por rol y flujo de trabajo de cada módulo | [![GitHub](https://img.shields.io/badge/-Perfil-181717?style=flat-square&logo=github)](https://github.com/alvarezdylan544-design) |
-| **David Reyes** | Líder de calidad e integridad de datos | Estrategia de pruebas, validaciones, seguridad del acceso, persistencia JSON e integración de los módulos | [![GitHub](https://img.shields.io/badge/-Perfil-181717?style=flat-square&logo=github)](https://github.com/david556rh) |
+<div align="center">
+
+| Desarrollador | Rol | Responsabilidades clave | Repositorio |
+| :--- | :--- | :--- | :---: |
+| **Erick Jasiel López Borge** | Arquitecto de software y líder técnico | Dirección estratégica del proyecto, diseño integral de la arquitectura, modelado del dominio y definición de las reglas de negocio centrales | [![GitHub](https://img.shields.io/badge/GitHub-Perfil-24292F?style=for-the-badge&logo=github&logoColor=white)](https://github.com/ErickLopez-TECH) |
+| **Dylan Álvarez** | Líder de interfaz y experiencia de usuario | Dirección visual, diseño de ventanas, tablas y formularios, fluidez de navegación entre módulos y apoyo en aseguramiento de calidad | [![GitHub](https://img.shields.io/badge/GitHub-Perfil-24292F?style=for-the-badge&logo=github&logoColor=white)](https://github.com/alvarezdylan544-design) |
+| **David Reyes** | Líder de calidad e integridad de datos | Aseguramiento de calidad, validaciones, control de acceso, manejo de datos e integración general | [![GitHub](https://img.shields.io/badge/GitHub-Perfil-24292F?style=for-the-badge&logo=github&logoColor=white)](https://github.com/david556rh) |
 
 </div>
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=12,20,24&height=90&section=footer" width="100%"/>
+<div align="center">
+  <img src="https://capsule-render.vercel.app/api?type=rect&color=gradient&customColorList=6,11,20&height=3" width="100%" />
+</div>
+
