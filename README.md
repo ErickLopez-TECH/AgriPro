@@ -53,7 +53,7 @@ El sistema centraliza el **registro, control y análisis** de lotes, cultivos y 
 <div align="center">
   <img src="https://github.com/user-attachments/assets/c1c2357e-79b5-4735-97ab-e71454d1e1a0" alt="agriImg" style="max-width: 100%; height: auto;" />
   <br /><br />
-  <img src="https://github.com/user-attachments/assets/c5db5686-9743-4e9b-b4ea-9b18cb192aeb" alt="Vista previa de Control Agrícola" width="64" style="max-width: 100%; height: auto;" />
+  <img src="https://github.com/user-attachments/assets/1c7eec00-5ad3-4084-84de-3ac30584442e" alt="agri" style="max-width: 829px; width: 100%; height: auto;" />
 </div>
 ---
 
@@ -273,8 +273,8 @@ Control Agrícola es el resultado del trabajo coordinado de tres especialistas; 
 | Desarrollador | Rol | Responsabilidades clave | GitHub |
 | :-- | :-- | :-- | :--: |
 | **Erick Jasiel López Borge** | Arquitecto de software y líder técnico | Diseño de la arquitectura en capas, modelo de dominio, reglas de negocio, motor de calendarización y cálculo de consumo de agroquímicos | [![GitHub](https://img.shields.io/badge/-Perfil-181717?style=flat-square&logo=github)](https://github.com/ErickLopez-TECH) |
-| **Dylan Álvarez** | Líder de interfaz y experiencia de usuario | Diseño e implementación de las ventanas, tablas y formularios; navegación por rol y flujo de trabajo de cada módulo | [![GitHub](https://img.shields.io/badge/-Perfil-181717?style=flat-square&logo=github)](https://github.com/) |
-| **David Reyes** | Líder de calidad e integridad de datos | Estrategia de pruebas, validaciones, seguridad del acceso, persistencia JSON e integración de los módulos | [![GitHub](https://img.shields.io/badge/-Perfil-181717?style=flat-square&logo=github)](https://github.com/) |
+| **Dylan Álvarez** | Líder de interfaz y experiencia de usuario | Diseño e implementación de las ventanas, tablas y formularios; navegación por rol y flujo de trabajo de cada módulo | [![GitHub](https://img.shields.io/badge/-Perfil-181717?style=flat-square&logo=github)](https://github.com/alvarezdylan544-design) |
+| **David Reyes** | Líder de calidad e integridad de datos | Estrategia de pruebas, validaciones, seguridad del acceso, persistencia JSON e integración de los módulos | [![GitHub](https://img.shields.io/badge/-Perfil-181717?style=flat-square&logo=github)](https://github.com/david556rh) |
 
 </div>
 
