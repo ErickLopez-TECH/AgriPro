@@ -1,3 +1,4 @@
+
 <div align="center">
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=12,20,24&height=150&section=header&text=Control%20Agr%C3%ADcola&fontSize=44&fontColor=ffffff&fontAlignY=38&desc=Gesti%C3%B3n%20de%20cultivos%2C%20aplicaciones%20y%20proyecci%C3%B3n%20de%20agroqu%C3%ADmicos&descSize=16&descAlignY=60&animation=fadeIn" width="100%"/>
@@ -49,11 +50,11 @@ El sistema centraliza el **registro, control y análisis** de lotes, cultivos y 
 
 ## Vista previa
 
-<!-- Reemplace la ruta por una captura real del sistema -->
 <div align="center">
-  <img src="Imagenes/preview.png" alt="Vista previa de Control Agrícola" width="780"/>
+  <img src="https://github.com/user-attachments/assets/c1c2357e-79b5-4735-97ab-e71454d1e1a0" alt="agriImg" style="max-width: 100%; height: auto;" />
+  <br /><br />
+  <img src="https://github.com/user-attachments/assets/c5db5686-9743-4e9b-b4ea-9b18cb192aeb" alt="Vista previa de Control Agrícola" width="64" style="max-width: 100%; height: auto;" />
 </div>
-
 ---
 
 ## Módulos del sistema
