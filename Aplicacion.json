@@ -6,7 +6,40 @@
     "Estado": 0,
     "Detalle": [
       {
-        "producto": "Gramoxon 1L=1"
+        "producto": "Gramoxon 1L=1",
+        "TipoAgroquimico": "null",
+        "dosisHectarea": 0.0
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "Nombre": "Apli 2",
+    "Justificacion": "2",
+    "Estado": 0,
+    "Detalle": [
+      {
+        "producto": "Gramoxone=1",
+        "TipoAgroquimico": "Herbicidas",
+        "dosisHectarea": 2.5
+      },
+      {
+        "producto": "adsa=3",
+        "TipoAgroquimico": "Herbicidas",
+        "dosisHectarea": 21.0
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "Nombre": "Apli 3",
+    "Justificacion": "x",
+    "Estado": 0,
+    "Detalle": [
+      {
+        "producto": "Gramoxone=1",
+        "TipoAgroquimico": "Herbicidas",
+        "dosisHectarea": 2.5
       }
     ]
    }
